@@ -1,8 +1,16 @@
 var canvas;
 var context;
 
-window.addEventListener("load", function() {
+function onResize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function main() {
   canvas = document.getElementById("screen");
   context = canvas.getContext("2d");
-  context.fillRect(10, 10, 10, 10);
-});
+  onResize();
+  window.addEventListener("resize", onResize);
+}
+
+window.addEventListener("load", main);

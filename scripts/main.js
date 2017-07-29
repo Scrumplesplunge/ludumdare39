@@ -1,16 +1,5 @@
-var canvas;
-var context;
-
-function onResize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-function main() {
-  canvas = document.getElementById("screen");
-  context = canvas.getContext("2d");
-  onResize();
-  window.addEventListener("resize", onResize);
-}
-
-window.addEventListener("load", main);
+Game.startState.on("draw", function(event) {
+  var canvas = event.context.canvas;
+  event.context.clearRect(0, 0, canvas.width, canvas.height);
+  event.context.fillRect(10, 10, 10, 10);
+});

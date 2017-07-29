@@ -2,6 +2,7 @@ var Config = {
   animationFrameRate: 15,
   cameraTrackingRate: 0.95,
   gravity: 30,
+  levelMakerCameraSpeed: 500,
   screen: {
     width: 800,
     height: 600,

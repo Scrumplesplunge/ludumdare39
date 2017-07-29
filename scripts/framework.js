@@ -48,11 +48,17 @@ var Game = (function() {
 
     // Forward various page events to the active state.
     canvas.addEventListener("mousemove", function(event) {
-      gameState.trigger({type: "mousemove", x: event.offsetX, y: event.offsetY});
+      gameState.trigger({
+        type: "mousemove",
+        x: event.offsetX,
+        y: event.offsetY,
+      });
     });
     canvas.addEventListener("mousedown", function(event) {
       gameState.trigger({type: "mousedown", button: event.button});
+      event.preventDefault();
     });
+    canvas.addEventListener("contextmenu", event => event.preventDefault());
     canvas.addEventListener("mouseup", function(event) {
       gameState.trigger({type: "mouseup", button: event.button});
     });

@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Level Maker</title>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/util.js"></script>
+    <script src="scripts/async_barrier.js"></script>
+    <script src="scripts/sprites.js"></script>
+    <script src="scripts/monitoring.js"></script>
+    <script src="scripts/event_manager.js"></script>
+    <script src="scripts/keyboard.js"></script>
+    <script src="scripts/game_state.js"></script>
+    <script src="scripts/framework.js"></script>
+    <script src="scripts/physics.js"></script>
+    <script src="scripts/wizard.js"></script>
+    <script src="scripts/make_level.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      #data {
+        width: 100%;
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="screen"></canvas>
+    Level image: <input id="image" type="file" /><br />
+    Level data:<br />
+    <textarea id="data"></textarea><br />
+    <input type="button" id="load" value="Load From Level Data" />
+  </body>
+</head>

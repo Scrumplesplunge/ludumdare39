@@ -1,5 +1,6 @@
 var Config = {
   animationFrameRate: 15,
+  cameraTrackingRate: 0.95,
   gravity: 30,
   screen: {
     width: 800,

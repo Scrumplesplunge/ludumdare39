@@ -5,6 +5,14 @@ function schedule(callback) {
   setTimeout(callback, 0);
 }
 
+// Load an image and run a callback once it is loaded.
+function loadImage(name, callback) {
+  var image = new Image();
+  image.onload = callback;
+  image.src = name;
+  return image;
+}
+
 class Vector {
   constructor(x, y) {
     this.x = x;

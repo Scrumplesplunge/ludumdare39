@@ -1,8 +1,10 @@
 var demoState = new EventManager("demo");
+var horizon;
 
 Game.startState.on("enter", function(event) {
   var barrier = new AsyncBarrier;
   Sprites.load(barrier.increment());
+  horizon = loadImage("horizon.png", barrier.increment());
   barrier.wait(() => Game.switchState(demoState));
 });
 
@@ -53,9 +55,13 @@ universe.add(
     new RewardItem(wizard, Sprites.items.orb, new Vector(450, 230), 10, 20));
 
 var time = 0;
+var focus = new Vector(0, 0);
 demoState.on("update", function(event) {
   time += Config.updateDelay;
   universe.update(Config.updateDelay);
+  var offset = wizard.position.sub(focus);
+  var amount = 1 - Math.pow(1 - Config.cameraTrackingRate, Config.updateDelay);
+  focus = focus.add(offset.mul(amount));
 });
 
 var keyboard = new Keyboard(demoState);
@@ -76,6 +82,11 @@ keyboard.on("keyup", function(event) {
 
 demoState.on("draw", function(event) {
   var canvas = event.context.canvas;
-  event.context.clearRect(0, 0, canvas.width, canvas.height);
-  universe.draw(event.context);
+  event.context.drawImage(horizon, 0, 0);
+  event.context.save();
+    var center = new Vector(canvas.width * 0.5, canvas.height * 0.5);
+    var offset = center.sub(focus);
+    event.context.translate(offset.x, offset.y);
+    universe.draw(event.context);
+  event.context.restore();
 });

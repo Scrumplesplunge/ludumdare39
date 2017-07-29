@@ -5,9 +5,8 @@ var Sprites = (function() {
   function load(callback) {
     console.log("Loading sprite image...");
     loaded = false;
-    var spriteImage = new Image;
-    spriteImage.onload = () => spriteImageLoaded(spriteImage, callback);
-    spriteImage.src = "sprites.png";
+    var spriteImage = loadImage(
+        "sprites.png", () => spriteImageLoaded(spriteImage, callback));
   }
 
   function spriteImageLoaded(spriteImage, callback) {

@@ -14,9 +14,13 @@ class AsyncBarrier {
     this.count = 0;
     this.callback = null;
   }
-  increment() {
+  increment(callback) {
     this.count++;
-    return () => this.decrement();
+    if (callback) {
+      return () => { callback(); this.decrement(); };
+    } else {
+      return () => this.decrement();
+    }
   }
   decrement() {
     this.count--;

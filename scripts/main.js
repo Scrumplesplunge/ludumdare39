@@ -18,11 +18,12 @@ var pointHandlers = {
 };
 
 Game.startState.on("enter", function(event) {
-  var barrier = new AsyncBarrier;
-  level = new Level(Levels.demo, pointHandlers, barrier.increment());
-  Sprites.load(barrier.increment());
-  horizon = loadImage("horizon.png", barrier.increment());
-  barrier.wait(() => Game.switchState(demoState));
+  var loader = new Loader("loader");
+  level = new Level(Levels.demo, pointHandlers, loader.loaded("level"));
+  horizon = loader.loadImage("horizon.png");
+  Sprites.load(loader.loaded("sprites"));
+  loader.waitUntilLoaded(() => Game.switchState(demoState));
+  Game.switchState(loader);
 });
 
 var time = 0;

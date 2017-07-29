@@ -3,6 +3,13 @@ var Config = {
   cameraTrackingRate: 0.99,
   gravity: 30,
   levelMakerCameraSpeed: 500,
+  loader: {
+    backgroundColor: "#5c5c5c",
+    color: "#acacac",
+    largeFontSize: 50,
+    smallFontSize: 20,
+    history: 5,
+  },
   screen: {
     width: 800,
     height: 600,

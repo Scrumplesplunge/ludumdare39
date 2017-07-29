@@ -1,6 +1,10 @@
 var Config = {
   animationFrameRate: 15,
   gravity: 30,
+  screen: {
+    width: 800,
+    height: 600,
+  },
   showBoundaries: true,
   updateDelay: 0.02,
   wizard: {

@@ -33,15 +33,12 @@ var Game = (function() {
 
     setTimeout(updateLoop, 1000 * Config.updateDelay);
   }
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
+
   startState.on("enter", function() {
     canvas = document.getElementById("screen");
+    canvas.width = Config.screen.width;
+    canvas.height = Config.screen.height;
     context = canvas.getContext("2d");
-    resize();
-    window.addEventListener("resize", resize);
     schedule(updateLoop);
   });
 

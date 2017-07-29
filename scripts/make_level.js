@@ -78,12 +78,15 @@ builderState.on("mousedown", function(event) {
       if (currentShape.length == 0) {
         // When not building a shape, right mouse button tags a point.
         var position = [targetPosition.x, targetPosition.y];
-        var label = prompt("Enter a label for this point.");
-        if (!levelData.labels.hasOwnProperty(label) ||
-            confirm("There is already a point with the label " + label +
-                    ". Replace?")) {
-          levelData.labels[label] = position;
-        }
+        // Chrome has a bug where prompt/confirm causes the whole browser to
+        // hang. I think we will have to do without :(
+        //
+        // var label = prompt("Enter a label for this point.");
+        // if (!levelData.labels.hasOwnProperty(label) ||
+        //     confirm("There is already a point with the label " + label +
+        //             ". Replace?")) {
+        //   levelData.labels[label] = position;
+        // }
       } else {
         // When building a shape, right mouse button discards the temporary
         // boundary and finishes.

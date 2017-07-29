@@ -17,13 +17,13 @@ var Sprites = (function() {
     spriteSheet.height = spriteImage.height;
     var context = spriteSheet.getContext("2d");
     // Set the colours from the config.
-    context.fillStyle = Config.wizard.robeColor;
+    context.fillStyle = Config.wizard.color.robe;
     context.fillRect(0, 0, 512, 64);
     context.fillRect(0, 192, 512, 64);
-    context.fillStyle = Config.wizard.shoeColor;
+    context.fillStyle = Config.wizard.color.shoes;
     context.fillRect(0, 64, 512, 64);
     context.fillRect(0, 256, 512, 64);
-    context.fillStyle = Config.wizard.skinColor;
+    context.fillStyle = Config.wizard.color.skin;
     context.fillRect(0, 128, 512, 64);
     context.fillRect(0, 320, 512, 64);
     // Draw the sprite sheet into the canvas.

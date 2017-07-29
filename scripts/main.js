@@ -25,6 +25,7 @@ class Wizard extends PhysicsObject {
   }
   update(delta) {
     this.animationTime += delta;
+    this.velocity = new Vector(this.movement * Config.wizard.speed, 0);
     // Update the sprite config if necessary.
     if (this.movement != this.previousMovement) {
       this.animationTime = 0;

@@ -57,6 +57,7 @@ var Sprites = (function() {
     state: {
       stationary: 0,
       running: [1, 2, 3, 4, 5],
+      jumping: 6,
     },
   };
 

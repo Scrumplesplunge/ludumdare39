@@ -31,7 +31,7 @@ var Game = (function() {
     var drawEnd = Date.now();
     Metrics.record("draw-time-ms", drawEnd - drawStart);
 
-    window.requestAnimationFrame(updateLoop);
+    setTimeout(updateLoop, 1000 * Config.updateDelay);
   }
   function resize() {
     canvas.width = window.innerWidth;
@@ -42,7 +42,7 @@ var Game = (function() {
     context = canvas.getContext("2d");
     resize();
     window.addEventListener("resize", resize);
-    window.requestAnimationFrame(updateLoop);
+    schedule(updateLoop);
   });
 
   // Forward various page events to the active state.
@@ -54,6 +54,12 @@ var Game = (function() {
   });
   window.addEventListener("mouseup", function(event) {
     gameState.trigger({type: "mouseup", button: event.button});
+  });
+  window.addEventListener("keydown", function(event) {
+    gameState.trigger({type: "keydown", key: event.key});
+  });
+  window.addEventListener("keyup", function(event) {
+    gameState.trigger({type: "keyup", key: event.key});
   });
 
   return {

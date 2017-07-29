@@ -21,9 +21,14 @@ class Wizard extends PhysicsObject {
     this.state = Sprites.wizard.state.stationary;
     this.sprite = this.direction + this.state;
     this.animationTime = 0;
+    this.currentlyOnGround = false;
+    this.previouslyOnGround = false;
     this.on("update", event => this.update(event.delta));
+    this.on("collide", event => this.collide(event.boundary));
   }
   update(delta) {
+    this.previouslyOnGround = this.currentlyOnGround;
+    this.currentlyOnGround = false;
     this.animationTime += delta;
     this.velocity =
         new Vector(this.movement * Config.wizard.speed, this.velocity.y);
@@ -47,12 +52,21 @@ class Wizard extends PhysicsObject {
     }
     this.previousMovement = this.movement;
     // Select the appropriate sprite from the animation.
-    if (this.state instanceof Array) {
+    if (!this.onGround()) {
+      this.sprite = this.direction + Sprites.wizard.state.jumping;
+    } else if (this.state instanceof Array) {
       var phase = Math.floor(Config.animationFrameRate * this.animationTime);
       this.sprite = this.direction + this.state[phase % this.state.length];
     } else {
       this.sprite = this.direction + this.state;
     }
+  }
+  collide(boundary) {
+    if (boundary.allowedDirection().y < 0) this.currentlyOnGround = true;
+  }
+  onGround() { return this.previouslyOnGround || this.currentlyOnGround; }
+  jump() {
+    if (this.onGround()) this.velocity.y = -Config.wizard.jumpSpeed;
   }
   draw(context) {
     Sprites.draw(context, this.sprite + Sprites.wizard.part.shoes,
@@ -86,13 +100,28 @@ for (var i = 1, n = boundaries.length; i < n; i++) {
 
 var time = 0;
 demoState.on("update", function(event) {
-  time += event.delta;
-  universe.update(event.delta);
+  time += Config.updateDelay;
+  universe.update(Config.updateDelay);
+});
+
+var keyboard = new Keyboard(demoState);
+keyboard.on("keydown", function(event) {
+  switch (event.key) {
+    case "a": wizard.movement -= 1; break;
+    case "d": wizard.movement += 1; break;
+    case "w": wizard.jump(); break;
+  }
+});
+
+keyboard.on("keyup", function(event) {
+  switch (event.key) {
+    case "a": wizard.movement += 1; break;
+    case "d": wizard.movement -= 1; break;
+  }
 });
 
 demoState.on("draw", function(event) {
   var canvas = event.context.canvas;
-  wizard.movement = Math.round(Math.sin(0.5 * time));
   event.context.clearRect(0, 0, canvas.width, canvas.height);
   universe.draw(event.context);
 });

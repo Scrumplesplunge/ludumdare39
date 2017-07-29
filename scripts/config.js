@@ -12,4 +12,5 @@ var Config = {
     jumpSpeed: 500,
     speed: 300,
   },
+  orbColor: "#00ff00",
 };

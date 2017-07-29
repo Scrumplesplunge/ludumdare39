@@ -26,6 +26,8 @@ var Sprites = (function() {
     context.fillStyle = Config.wizard.color.skin;
     context.fillRect(0, 128, 512, 64);
     context.fillRect(0, 320, 512, 64);
+    context.fillStyle = Config.orbColor;
+    context.fillRect(0, 384, 64, 64);
     // Draw the sprite sheet into the canvas.
     context.globalCompositeOperation = "destination-in";
     context.drawImage(spriteImage, 0, 0);
@@ -61,9 +63,14 @@ var Sprites = (function() {
     },
   };
 
+  var items = {
+    orb: 48,
+  };
+
   return {
     load: load,
     draw: draw,
+    items: items,
     wizard: wizard,
   };
 }());

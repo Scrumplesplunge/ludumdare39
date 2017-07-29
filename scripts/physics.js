@@ -19,6 +19,21 @@ class Boundary {
   remove() { this.removed = true; }
 }
 
+// An effect is like a boundary, except that an intersection does not result in
+// collision resolution. Instead, it activates custom effects.
+class Effect {
+  constructor(position, radius) {
+    this.position = position;
+    this.radius = radius;
+    this.removed = false;
+  }
+  activate(object) {
+    throw new Error("No activate function provided for effect.");
+  }
+  draw(context) {}
+  remove() { this.removed = true; }
+}
+
 // A physics object is something which collides with the world. They are
 // modelled as circles for simplicity.
 class PhysicsObject extends EventManager {
@@ -36,15 +51,18 @@ class PhysicsObject extends EventManager {
 class Universe {
   constructor() {
     this.boundaries = [];
+    this.effects = [];
     this.objects = [];
   }
-  add(objectOrBoundary) {
-    if (objectOrBoundary instanceof Boundary) {
-      this.boundaries.push(objectOrBoundary);
-    } else if (objectOrBoundary instanceof PhysicsObject) {
-      this.objects.push(objectOrBoundary);
+  add(x) {
+    if (x instanceof Boundary) {
+      this.boundaries.push(x);
+    } else if (x instanceof Effect) {
+      this.effects.push(x);
+    } else if (x instanceof PhysicsObject) {
+      this.objects.push(x);
     } else {
-      throw Error("Only objects or boundaries can be added to a universe.");
+      throw Error("Invalid type to add to universe.");
     }
   }
   update(delta) {
@@ -56,12 +74,20 @@ class Universe {
       object.velocity = object.velocity.add(gravity);
       object.position = object.position.add(object.velocity.mul(delta));
     }
-    // Resolve collisions.
+    this.resolveCollisions();
+    this.activateEffects();
+    removeIf(boundary => boundary.removed, this.boundaries);
+    removeIf(effect => effect.removed, this.effects);
+    removeIf(object => object.removed, this.objects);
+  }
+  resolveCollisions() {
     for (var i = 0, n = this.objects.length; i < n; i++) {
       var object = this.objects[i];
+      if (object.removed) continue;
       var radius = object.radius;
       for (var j = 0, m = this.boundaries.length; j < m; j++) {
         var boundary = this.boundaries[j];
+        if (boundary.removed) continue;
         // Compute where the object is relative to the boundary.
         var lineDirection = boundary.b.sub(boundary.a);
         var offsetA = object.position.sub(boundary.a);
@@ -92,8 +118,6 @@ class Universe {
         }
       }
     }
-    removeIf(object => object.removed, this.objects);
-    removeIf(boundary => boundary.removed, this.boundaries);
   }
   resolve(object, boundary, offset) {
     var disallowedDirection = boundary.disallowedDirection().normalized();
@@ -110,9 +134,24 @@ class Universe {
     object.position = object.position.add(adjustment);
     object.trigger({type: "collide", boundary: boundary, offset: offset});
   }
+  activateEffects() {
+    for (var i = 0, n = this.objects.length; i < n; i++) {
+      var object = this.objects[i];
+      if (object.removed) continue;
+      for (var j = 0, m = this.effects.length; j < m; j++) {
+        var effect = this.effects[i];
+        if (effect.removed) continue;
+        var offset = effect.position.sub(object.position);
+        var combinedRadius = object.radius + effect.radius;
+        if (offset.squareLength() < combinedRadius * combinedRadius)
+          effect.activate(object);
+      }
+    }
+  }
   draw(context) {
     if (Config.showBoundaries)
       this.boundaries.forEach(boundary => boundary.draw(context));
+    this.effects.forEach(effect => effect.draw(context));
     this.objects.forEach(object => object.draw(context));
   }
 }

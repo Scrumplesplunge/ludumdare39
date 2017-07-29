@@ -1,5 +1,6 @@
 var Config = {
   animationFrameRate: 15,
+  gravity: 50,
   showBoundaries: true,
   wizard: {
     color: {

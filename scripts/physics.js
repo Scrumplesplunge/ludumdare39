@@ -9,7 +9,7 @@ class Boundary {
     this.removed = false;
   }
   allowedDirection() { return this.b.sub(this.a).rotate90(); }
-  disallowedDirection() { return allowedDirection().neg(); }
+  disallowedDirection() { return this.allowedDirection().neg(); }
   draw(context) {
     context.beginPath();
     context.moveTo(this.a.x, this.a.y);
@@ -49,9 +49,11 @@ class Universe {
   }
   update(delta) {
     // Perform independent updates for all objects.
+    var gravity = new Vector(0, Config.gravity);
     for (var i = 0, n = this.objects.length; i < n; i++) {
       var object = this.objects[i];
       object.trigger({type: "update", delta: delta});
+      object.velocity = object.velocity.add(gravity);
       object.position = object.position.add(object.velocity.mul(delta));
     }
     // Resolve collisions.
@@ -64,23 +66,27 @@ class Universe {
         var lineDirection = boundary.b.sub(boundary.a);
         var offsetA = object.position.sub(boundary.a);
         var locationOnLine =
-            lineDirection.dot(offsetA).div(lineDirection.squareLength());
-        if (locationOnLine < 0 && offsetA.squareLength() < radius * radius) {
-          // Collision with endpoint a.
-          this.resolve(object, boundary, offsetA);
+            lineDirection.dot(offsetA) / lineDirection.squareLength();
+        if (locationOnLine < 0) {
+          if (offsetA.squareLength() < radius * radius) {
+            // Collision with endpoint a.
+            this.resolve(object, boundary, offsetA);
+          }
           continue;
         }
         var offsetB = object.position.sub(boundary.b);
-        if (locationOnLine > 1 && offsetB.squareLength() < radius * radius) {
-          // Collision with endpoint b.
-          this.resolve(object, boundary, offsetB);
+        if (locationOnLine > 1) {
+          if (offsetB.squareLength() < radius * radius) {
+            // Collision with endpoint b.
+            this.resolve(object, boundary, offsetB);
+          }
           continue;
         }
         var boundaryNormal = lineDirection.rotate90().normalized();
         var surfaceDistance = boundaryNormal.dot(offsetA);
         if (-radius < surfaceDistance && surfaceDistance < radius) {
           // Collision with surface.
-          var offset = object.position.sub(boundaryNormal.mul(surfaceDistance));
+          var offset = boundaryNormal.mul(surfaceDistance);
           this.resolve(object, boundary, offset);
           continue;
         }
@@ -90,18 +96,18 @@ class Universe {
     removeIf(boundary => boundary.removed, this.boundaries);
   }
   resolve(object, boundary, offset) {
-    // Move the object along the offset vector until it is no longer
-    // intersecting.
-    var offsetLength = offset.length();
-    var adjustment = offset.mul((object.radius - offsetLength) / offsetLength);
-    object.position = object.position.add(adjustment);
-
     var disallowedDirection = boundary.disallowedDirection().normalized();
     var disallowedComponent = object.velocity.dot(disallowedDirection);
     if (disallowedComponent < 0) return;  // Direction of movement is allowed.
 
     object.velocity =
         object.velocity.sub(disallowedDirection.mul(disallowedComponent));
+
+    // Move the object along the offset vector until it is no longer
+    // intersecting.
+    var offsetLength = offset.length();
+    var adjustment = offset.mul((object.radius - offsetLength) / offsetLength);
+    object.position = object.position.add(adjustment);
     object.trigger({type: "collide", boundary: boundary, offset: offset});
   }
   draw(context) {

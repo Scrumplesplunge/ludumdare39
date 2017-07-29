@@ -13,7 +13,7 @@ demoState.on("update", function(event) {
 
 class Wizard extends PhysicsObject {
   constructor(position) {
-    super(position, 32);
+    super(position, 28);
     // -1 for left, 0 for stationary, 1 for right.
     this.movement = 0;
     this.previousMovement = 0;
@@ -25,7 +25,8 @@ class Wizard extends PhysicsObject {
   }
   update(delta) {
     this.animationTime += delta;
-    this.velocity = new Vector(this.movement * Config.wizard.speed, 0);
+    this.velocity =
+        new Vector(this.movement * Config.wizard.speed, this.velocity.y);
     // Update the sprite config if necessary.
     if (this.movement != this.previousMovement) {
       this.animationTime = 0;
@@ -66,6 +67,22 @@ class Wizard extends PhysicsObject {
 var universe = new Universe;
 var wizard = new Wizard(new Vector(100, 100));
 universe.add(wizard);
+var boundaries = [
+  [10, 10],
+  [500, 10],
+  [500, 300],
+  [400, 275],
+  [300, 300],
+  [200, 275],
+  [100, 300],
+  [10, 300],
+  [10, 10]
+];
+for (var i = 1, n = boundaries.length; i < n; i++) {
+  var a = boundaries[i - 1];
+  var b = boundaries[i];
+  universe.add(new Boundary(new Vector(a[0], a[1]), new Vector(b[0], b[1])));
+}
 
 var time = 0;
 demoState.on("update", function(event) {
@@ -75,7 +92,7 @@ demoState.on("update", function(event) {
 
 demoState.on("draw", function(event) {
   var canvas = event.context.canvas;
-  wizard.movement = Math.round(Math.sin(time));
+  wizard.movement = Math.round(Math.sin(0.5 * time));
   event.context.clearRect(0, 0, canvas.width, canvas.height);
   universe.draw(event.context);
 });

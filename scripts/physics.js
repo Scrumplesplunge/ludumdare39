@@ -21,8 +21,9 @@ class Boundary {
 
 // An effect is like a boundary, except that an intersection does not result in
 // collision resolution. Instead, it activates custom effects.
-class Effect {
+class Effect extends EventManager {
   constructor(position, radius) {
+    super("effect");
     this.position = position;
     this.radius = radius;
     this.removed = false;
@@ -66,14 +67,15 @@ class Universe {
     }
   }
   update(delta) {
-    // Perform independent updates for all objects.
+    // Perform independent updates for all effects and objects.
+    this.effects.forEach(
+        effect => effect.trigger({type: "update", delta: delta}));
     var gravity = new Vector(0, Config.gravity);
-    for (var i = 0, n = this.objects.length; i < n; i++) {
-      var object = this.objects[i];
+    this.objects.forEach(function(object) {
       object.trigger({type: "update", delta: delta});
       object.velocity = object.velocity.add(gravity);
       object.position = object.position.add(object.velocity.mul(delta));
-    }
+    });
     this.resolveCollisions();
     this.activateEffects();
     removeIf(boundary => boundary.removed, this.boundaries);

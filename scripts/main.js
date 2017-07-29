@@ -49,26 +49,8 @@ addShape([
 // Add an isolated boundary that can only be walked through in one direction.
 universe.add(new Boundary(new Vector(400, 200), new Vector(400, 275)));
 
-// An item is something a wizard can collect.
-class Item extends Effect {
-  constructor(sprite, position, radius, spriteRadius) {
-    super(position, radius);
-    this.sprite = sprite;
-    this.spriteRadius = spriteRadius || radius;
-  }
-  activate(object) {
-    console.log("Activated!");
-    if (object instanceof Wizard) {
-      this.remove();
-    }
-  }
-  draw(context) {
-    var x = this.position.x, y = this.position.y, r = this.spriteRadius;
-    Sprites.draw(context, this.sprite, x - r, y - r, 2 * r, 2 * r);
-  }
-}
-
-universe.add(new Item(Sprites.items.orb, new Vector(450, 230), 10, 20));
+universe.add(
+    new RewardItem(wizard, Sprites.items.orb, new Vector(450, 230), 10, 20));
 
 var time = 0;
 demoState.on("update", function(event) {

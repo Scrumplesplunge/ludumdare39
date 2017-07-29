@@ -13,4 +13,5 @@ var Config = {
     speed: 300,
   },
   orbColor: "#00ff00",
+  rewardSpeed: 500,
 };

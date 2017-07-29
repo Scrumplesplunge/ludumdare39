@@ -1,6 +1,6 @@
 var Config = {
   animationFrameRate: 15,
-  cameraTrackingRate: 0.99,
+  cameraTrackingRate: 0.999,
   gravity: 30,
   levelMakerCameraSpeed: 500,
   loader: {
@@ -15,14 +15,14 @@ var Config = {
     height: 600,
   },
   showBoundaries: false,
-  updateDelay: 0.02,
+  updateDelay: 0.01,
   wizard: {
     color: {
       robe: "#5c5c5c",
       shoes: "#1c1c1c",
       skin: "#acacac",
     },
-    jumpSpeed: 500,
+    jumpSpeed: 750,
     speed: 300,
   },
   orbColor: "#00ff00",

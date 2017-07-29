@@ -26,15 +26,8 @@ Game.startState.on("enter", function(event) {
   Game.switchState(loader);
 });
 
-var time = 0;
-demoState.on("update", function(event) {
-  time += event.delta;
-});
-
-var time = 0;
 var focus = new Vector(0, 0);
 demoState.on("update", function(event) {
-  time += Config.updateDelay;
   level.update(Config.updateDelay);
 });
 

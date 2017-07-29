@@ -34,29 +34,34 @@ var Game = (function() {
     setTimeout(updateLoop, 1000 * Config.updateDelay);
   }
 
+  var startStateEntered = false;
   startState.on("enter", function() {
+    if (startStateEntered)
+      throw Error("Cannot enter start state a second time.");
+    startStateEntered = true;
+
     canvas = document.getElementById("screen");
     canvas.width = Config.screen.width;
     canvas.height = Config.screen.height;
     context = canvas.getContext("2d");
     schedule(updateLoop);
-  });
 
-  // Forward various page events to the active state.
-  window.addEventListener("mousemove", function(event) {
-    gameState.trigger({type: "mousemove", x: event.pageX, y: event.pageY});
-  });
-  window.addEventListener("mousedown", function(event) {
-    gameState.trigger({type: "mousedown", button: event.button});
-  });
-  window.addEventListener("mouseup", function(event) {
-    gameState.trigger({type: "mouseup", button: event.button});
-  });
-  window.addEventListener("keydown", function(event) {
-    gameState.trigger({type: "keydown", key: event.key});
-  });
-  window.addEventListener("keyup", function(event) {
-    gameState.trigger({type: "keyup", key: event.key});
+    // Forward various page events to the active state.
+    canvas.addEventListener("mousemove", function(event) {
+      gameState.trigger({type: "mousemove", x: event.offsetX, y: event.offsetY});
+    });
+    canvas.addEventListener("mousedown", function(event) {
+      gameState.trigger({type: "mousedown", button: event.button});
+    });
+    canvas.addEventListener("mouseup", function(event) {
+      gameState.trigger({type: "mouseup", button: event.button});
+    });
+    window.addEventListener("keydown", function(event) {
+      gameState.trigger({type: "keydown", key: event.key});
+    });
+    window.addEventListener("keyup", function(event) {
+      gameState.trigger({type: "keyup", key: event.key});
+    });
   });
 
   return {

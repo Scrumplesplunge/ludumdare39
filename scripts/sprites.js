@@ -44,25 +44,25 @@ var Sprites = (function() {
     context.drawImage(spriteSheet, offsetX, offsetY, 64, 64, x, y, w, h);
   }
 
-  var Direction = {
-    RIGHT: 0,
-    LEFT: 24,
-  };
-  var Part = {
-    ROBE: 0,
-    SHOES: 8,
-    SKIN: 16,
-  };
-  var State = {
-    STATIONARY: 0,
-    RUNNING: [1, 2, 3, 4, 5],
+  var wizard = {
+    direction: {
+      right: 0,
+      left: 24,
+    },
+    part: {
+      robe: 0,
+      shoes: 8,
+      skin: 16,
+    },
+    state: {
+      stationary: 0,
+      running: [1, 2, 3, 4, 5],
+    },
   };
 
   return {
     load: load,
     draw: draw,
-    Direction: Direction,
-    Part: Part,
-    State: State,
+    wizard: wizard,
   };
 }());

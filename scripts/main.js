@@ -14,11 +14,16 @@ demoState.on("update", function(event) {
 demoState.on("draw", function(event) {
   var canvas = event.context.canvas;
   event.context.clearRect(0, 0, canvas.width, canvas.height);
-  var stages = Sprites.State.RUNNING.length;
+  var stages = Sprites.wizard.state.running.length;
   var phase = Math.floor(3 * stages * time) % stages;
-  var sprite = Sprites.Direction.RIGHT + Sprites.State.RUNNING[phase];
+  var sprite = Sprites.wizard.direction.right +
+               Sprites.wizard.state.running[phase];
 
-  Sprites.draw(event.context, sprite + Sprites.Part.SHOES, 10, 10, 64, 64);
-  Sprites.draw(event.context, sprite + Sprites.Part.SKIN, 10, 10, 64, 64);
-  Sprites.draw(event.context, sprite + Sprites.Part.ROBE, 10, 10, 64, 64);
+  function drawPart(part) {
+    Sprites.draw(event.context, sprite + part, 10, 10, 64, 64);
+  }
+
+  drawPart(Sprites.wizard.part.shoes);
+  drawPart(Sprites.wizard.part.skin);
+  drawPart(Sprites.wizard.part.robe);
 });

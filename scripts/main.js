@@ -36,6 +36,7 @@ class Portal extends Effect {
 
 function drawLifeBar(event) {
   // Render the life bar.
+  if (wizard.removed) return;
   var fraction = wizard.life / Config.creatures.wizard.maxLife;
   var maxWidth = Config.screen.width - 20;
   with (event.context) {
@@ -46,18 +47,9 @@ function drawLifeBar(event) {
   }
 }
 
-function moveMonster(event) {
-  var offset = wizard.position.x - monster.position.x;
-  if (Math.abs(offset) > 100) {
-    monster.movement = offset < 0 ? -1 : 1;
-  } else {
-    monster.movement = 0;
-  }
-}
-
 function configureLevel(level) {
+  level.on("enter", () => monster.target = wizard);
   level.on("draw", drawLifeBar);
-  level.on("update", moveMonster);
 }
 
 function loadLevel(levelData, loader) {

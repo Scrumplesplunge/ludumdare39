@@ -6,12 +6,7 @@ class Wizard extends Creature {
   }
   update(delta) {
     super.update(delta);
-    this.life -= Config.creatures.wizard.lifeLostPerSecond * delta;
-    if (this.life <= 0) {
-      console.log("Wizard died.");
-      this.trigger({type: "death"});
-      this.remove();
-    }
+    this.hurt(Config.creatures.wizard.lifeLostPerSecond * delta);
   }
   give(item) {
     if (!(item instanceof Item)) throw Error("Only items can be given.");
@@ -19,5 +14,13 @@ class Wizard extends Creature {
   }
   heal(amount) {
     this.life = Math.min(this.life + amount, Config.creatures.wizard.maxLife);
+  }
+  hurt(amount) {
+    this.life -= amount;
+    if (this.life <= 0) {
+      console.log("Wizard died.");
+      this.trigger({type: "death"});
+      this.remove();
+    }
   }
 }

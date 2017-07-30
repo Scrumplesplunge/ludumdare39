@@ -3,6 +3,8 @@ var Config = {
   cameraTrackingRate: 0.999,
   creatures: {
     monster: {
+      attackDamage: 50,
+      chaseRange: 500,
       color: {
         bones: "#5c5c5c",
         robe: "#cfd086",
@@ -21,7 +23,7 @@ var Config = {
       },
       maxLife: 100,
       jumpSpeed: 750,
-      lifeLostPerSecond: 10,
+      lifeLostPerSecond: 5,
       speed: 300,
     },
   },

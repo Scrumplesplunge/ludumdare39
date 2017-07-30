@@ -2,6 +2,10 @@ var Config = {
   animationFrameRate: 15,
   cameraTrackingRate: 0.999,
   creatures: {
+    chicken: {
+      jumpSpeed: 800,
+      speed: 200,
+    },
     pig: {
       jumpSpeed: 400,
       speed: 100,
@@ -15,6 +19,10 @@ var Config = {
         shoes: "#41351d",
         skin: "#87b144",
       },
+      jumpSpeed: 400,
+      speed: 100,
+    },
+    sheep: {
       jumpSpeed: 400,
       speed: 100,
     },

@@ -55,10 +55,12 @@ class SpellCast extends Effect {
 class TransformCast extends SpellCast {
   constructor(position, direction) { super(position, direction); }
   activate(object) {
-    if (object instanceof Monster) {
+    if ((object instanceof Creature) && !(object instanceof Wizard)) {
       console.log("Hit monster.");
       this.universe.randomParticles(object.position, 30, 50, 100, 0.5);
-      this.universe.add(new Pig(object.position));
+      var animalType = [Chicken, Pig, Sheep].random();
+      var animal = new animalType(object.position);
+      this.universe.add(animal);
       object.remove();
       this.remove();
     }

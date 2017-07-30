@@ -1,6 +1,6 @@
 class Creature extends PhysicsObject {
-  constructor(position, type) {
-    super(position, 28);
+  constructor(position, type, radius) {
+    super(position, radius);
 
     if (!Config.creatures.hasOwnProperty(type))
       throw Error("No creatures configuration for " + type);
@@ -81,20 +81,33 @@ class Creature extends PhysicsObject {
   }
   onGround() { return this.previouslyOnGround || this.currentlyOnGround; }
   jump() { if (this.onGround()) this.velocity.y = -this.config.jumpSpeed; }
-  draw(context) {
-    Sprites.sheet.animals.draw(
-        context, this.sprite,
-        this.position.x - 32, this.position.y - 32, 64, 64);
-  }
 }
 
-class Pig extends Creature {
-  constructor(position) {
-    super(position, "pig");
-
+class Animal extends Creature {
+  constructor(position, type, radius, spriteRadius) {
+    super(position, type, radius);
+    this.spriteRadius = spriteRadius;
     this.on("update", event => {
       this.moveRandomly(event.delta);
       this.jumpRandomly(event.delta);
     });
   }
+  draw(context) {
+    var r = this.spriteRadius;
+    Sprites.sheet.animals.draw(
+        context, this.sprite,
+        this.position.x - r, this.position.y - r, 2 * r, 2 * r);
+  }
+}
+
+class Pig extends Animal {
+  constructor(position) { super(position, "pig", 25, 32); }
+}
+
+class Sheep extends Animal {
+  constructor(position) { super(position, "sheep", 25, 32); }
+}
+
+class Chicken extends Animal {
+  constructor(position) { super(position, "chicken", 10, 20); }
 }

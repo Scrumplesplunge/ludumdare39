@@ -1,6 +1,6 @@
 class Humanoid extends Creature {
   constructor(position, type) {
-    super(position, type);
+    super(position, type, 25);
     this.type = type;
 
     // These properties are expected to be set by external code.

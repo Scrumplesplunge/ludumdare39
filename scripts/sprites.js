@@ -129,6 +129,17 @@ var Sprites = (function() {
 
   var codes = {
     creatures: {
+      chicken: {
+        direction: {
+          right: 16,
+          left: 20,
+        },
+        state: {
+          stationary: 0,
+          running: [1, 2],
+          jumping: 3,
+        },
+      },
       pig: {
         direction: {
           right: 0,
@@ -141,6 +152,17 @@ var Sprites = (function() {
         },
       },
       monster: humanoid,
+      sheep: {
+        direction: {
+          right: 8,
+          left: 12,
+        },
+        state: {
+          stationary: 0,
+          running: [1, 2, 3],
+          jumping: 0,
+        },
+      },
       wizard: humanoid,
     },
     items: {

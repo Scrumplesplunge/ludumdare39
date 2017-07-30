@@ -10,6 +10,16 @@ var Config = {
     smallFontSize: 20,
     history: 5,
   },
+  monster: {
+    color: {
+      bones: "#5c5c5c",
+      robe: "#cfd086",
+      shoes: "#41351d",
+      skin: "#87b144",
+    },
+    jumpSpeed: 400,
+    speed: 100,
+  },
   screen: {
     width: 800,
     height: 600,

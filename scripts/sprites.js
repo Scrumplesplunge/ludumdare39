@@ -6,6 +6,7 @@ class SpriteSheet {
     this.sprites = this.image;
   }
   imageLoaded(callback) {
+    console.log(this.filename + " loaded.");
     if (this.image.width != 512)
       throw Error("Sprite sheet must be 512px wide.");
     this.loaded = true;
@@ -25,6 +26,7 @@ class SpriteSheet {
     context.drawImage(colorMap, 0, 0);
     context.globalCompositeOperation = "destination-in";
     context.drawImage(this.image, 0, 0);
+    console.log(this.filename + " colors applied.");
   }
   draw(context, index, x, y, w, h) {
     if (!this.loaded)
@@ -37,7 +39,7 @@ class SpriteSheet {
   }
 }
 
-class WizardSpriteSheet extends SpriteSheet {
+class CreatureSpriteSheet extends SpriteSheet {
   constructor(filename, callback) {
     super(filename, () => this.spriteSheetReady(callback));
   }
@@ -46,7 +48,6 @@ class WizardSpriteSheet extends SpriteSheet {
                    Config.wizard.color.robe,
                    Config.wizard.color.shoes,
                    Config.wizard.color.skin);
-    console.log("Wizard sprites loaded.");
     callback();
   }
   setColors(bones, robe, shoes, skin) {
@@ -95,7 +96,7 @@ var Sprites = (function() {
   };
 
   var codes = {
-    wizard: {
+    creature: {
       direction: {
         right: 0,
         left: 32,
@@ -121,7 +122,9 @@ var Sprites = (function() {
     console.log("Loading sprites...");
     var barrier = new AsyncBarrier;
     sheet.wizard =
-        new WizardSpriteSheet("images/wizard.png", barrier.increment());
+        new CreatureSpriteSheet("images/wizard.png", barrier.increment());
+    sheet.monster =
+        new CreatureSpriteSheet("images/monster.png", barrier.increment());
     sheet.items = new ItemSpriteSheet("images/items.png", barrier.increment());
     barrier.wait(function() {
       console.log("All sprites loaded.");

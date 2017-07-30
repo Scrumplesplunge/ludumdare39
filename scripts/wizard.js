@@ -4,8 +4,8 @@ class Wizard extends PhysicsObject {
     // -1 for left, 0 for stationary, 1 for right.
     this.movement = 0;
     this.previousMovement = 0;
-    this.direction = Sprites.codes.wizard.direction.right;
-    this.state = Sprites.codes.wizard.state.stationary;
+    this.direction = Sprites.codes.creature.direction.right;
+    this.state = Sprites.codes.creature.state.stationary;
     this.sprite = this.direction + this.state;
     this.animationTime = 0;
     this.currentlyOnGround = false;
@@ -16,7 +16,7 @@ class Wizard extends PhysicsObject {
     this.on("collide", event => this.collide(event.boundary));
   }
   update(delta) {
-    var codes = Sprites.codes.wizard;
+    var codes = Sprites.codes.creature;
     this.previouslyOnGround = this.currentlyOnGround;
     this.currentlyOnGround = false;
     this.animationTime += delta;
@@ -63,7 +63,7 @@ class Wizard extends PhysicsObject {
     this.items.push(item);
   }
   draw(context) {
-    var part = Sprites.codes.wizard.part;
+    var part = Sprites.codes.creature.part;
     var parts = this.bones ? [part.bones] : [part.shoes, part.skin, part.robe];
     parts.forEach(part => {
       Sprites.sheet.wizard.draw(

@@ -20,9 +20,11 @@ var Config = {
         skin: "#acacac",
       },
       jumpSpeed: 750,
+      lifeLostPerSecond: 10,
       speed: 300,
     },
   },
+  deathScreenTimeout: 3,
   gravity: 30,
   levelMakerCameraSpeed: 500,
   loader: {

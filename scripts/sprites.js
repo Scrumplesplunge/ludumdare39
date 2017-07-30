@@ -103,6 +103,9 @@ class ItemSpriteSheet extends SpriteSheet {
 var Sprites = (function() {
   var sheet = {
     wizard: null,
+    monster: null,
+    items: null,
+    particles: null,
   };
 
   var codes = {
@@ -129,6 +132,7 @@ var Sprites = (function() {
       transformSpell: 8,
       selection: 9,
     },
+    particles: [0, 1, 2, 3, 4, 5],
   };
 
   function load(callback) {
@@ -137,6 +141,8 @@ var Sprites = (function() {
     sheet.wizard = new CreatureSpriteSheet("wizard", barrier.increment());
     sheet.monster = new CreatureSpriteSheet("monster", barrier.increment());
     sheet.items = new ItemSpriteSheet("images/items.png", barrier.increment());
+    sheet.particles =
+        new SpriteSheet("images/particles.png", barrier.increment());
     barrier.wait(function() {
       console.log("All sprites loaded.");
       callback();

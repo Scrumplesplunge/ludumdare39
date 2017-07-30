@@ -28,6 +28,11 @@ class Vector {
   length() { return Math.sqrt(this.squareLength()); }
   normalized() { return this.div(this.length()); }
   rotate90() { return new Vector(-this.y, this.x); }
+  static random() {
+    var r = Math.sqrt(-2 * Math.log(1 - Math.random()));
+    var theta = 2 * Math.PI * Math.random();
+    return new Vector(r * Math.sin(theta), r * Math.cos(theta));
+  }
 }
 
 // Remove elements from an array which satisfy a predicate. Linear time.
@@ -40,4 +45,8 @@ function removeIf(predicate, container) {
     }
   }
   container.splice(j);
+}
+
+Array.prototype.random = function() {
+  return this[Math.floor(this.length * Math.random())];
 }

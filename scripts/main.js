@@ -78,7 +78,10 @@ function loadLevel(levelData, loader) {
     "player": function(level, position, callback) {
       console.log("Spawning player at [%f, %f].", position.x, position.y);
       wizard = new Wizard(position);
-      wizard.on("death", () => Game.switchState(deathState));
+      wizard.on("death", function(event) {
+        level.randomParticles(wizard.position, 30, 50, 200, 0.5);
+        Game.switchState(deathState);
+      });
       level.keyboard.on("keydown", function(event) {
         switch (event.key) {
           case "a": wizard.movement -= 1; break;

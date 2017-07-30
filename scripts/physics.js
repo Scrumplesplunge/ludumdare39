@@ -19,6 +19,29 @@ class Boundary {
   remove() { this.removed = true; }
 }
 
+// Particles do nothing except move and look cool.
+class Particle {
+  constructor(sprite, radius, position, velocity, lifetime) {
+    this.sprite = sprite;
+    this.radius = radius;
+    this.position = position;
+    this.velocity = velocity;
+    this.lifetime = lifetime;
+    this.removed = false;
+  }
+  update(delta) {
+    this.position = this.position.add(this.velocity.mul(delta));
+    this.lifetime -= delta;
+    if (this.lifetime < 0) this.remove();
+  }
+  draw(context) {
+    var x = this.position.x, y = this.position.y, r = this.radius;
+    Sprites.sheet.particles.draw(
+        context, this.sprite, x - r, y - r, 2 * r, 2 * r);
+  }
+  remove() { this.removed = true; }
+}
+
 // An effect is like a boundary, except that an intersection does not result in
 // collision resolution. Instead, it activates custom effects.
 class Effect extends EventManager {
@@ -54,6 +77,7 @@ class Universe extends EventManager {
     super(name);
     this.boundaries = [];
     this.effects = [];
+    this.particles = [];
     this.objects = [];
     this.on("update", event => this.update(event.delta));
     this.on("draw", event => this.draw(event.context));
@@ -74,6 +98,7 @@ class Universe extends EventManager {
     this.effects.forEach(
         effect => effect.trigger({type: "update", delta: delta}));
     var gravity = new Vector(0, Config.gravity);
+    this.particles.forEach(particle => particle.update(delta));
     this.objects.forEach(function(object) {
       object.trigger({type: "update", delta: delta});
       object.velocity = object.velocity.add(gravity);
@@ -83,7 +108,18 @@ class Universe extends EventManager {
     this.activateEffects();
     removeIf(boundary => boundary.removed, this.boundaries);
     removeIf(effect => effect.removed, this.effects);
+    removeIf(particle => particle.removed, this.particles);
     removeIf(object => object.removed, this.objects);
+  }
+  randomParticles(position, maxRadius, count, speedFactor, maxLifetime) {
+    for (var i = 0; i < count; i++) {
+      var sprite = Sprites.codes.particles.random();
+      var radius = maxRadius * Math.random();
+      var velocity = Vector.random().mul(speedFactor);
+      var lifetime = maxLifetime * Math.random();
+      this.particles.push(
+          new Particle(sprite, radius, position, velocity, lifetime));
+    }
   }
   resolveCollisions() {
     for (var i = 0, n = this.objects.length; i < n; i++) {
@@ -163,6 +199,7 @@ class Universe extends EventManager {
     if (Config.showBoundaries)
       this.boundaries.forEach(boundary => boundary.draw(context));
     this.effects.forEach(effect => effect.draw(context));
+    this.particles.forEach(particle => particle.draw(context));
     this.objects.forEach(object => object.draw(context));
   }
 }

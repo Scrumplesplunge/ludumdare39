@@ -124,7 +124,13 @@ class Universe {
   resolve(object, boundary, offset) {
     var disallowedDirection = boundary.disallowedDirection().normalized();
     var disallowedComponent = object.velocity.dot(disallowedDirection);
-    if (disallowedComponent < 0) return;  // Direction of movement is allowed.
+    // If the component is negative, we will not collide with the boundary. We
+    // make this stricter by comparing against -10 because when you have two
+    // boundaries arranged in a < where the bottom one is slightly slanted
+    // downhill into the corner and the top one would hit the player's head, the
+    // position adjustments done by the two boundaries in sequence results in
+    // the player drifting through the wall.
+    if (disallowedComponent < -10) return;
 
     object.velocity =
         object.velocity.sub(disallowedDirection.mul(disallowedComponent));

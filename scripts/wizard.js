@@ -24,4 +24,13 @@ class Wizard extends Creature {
       this.remove();
     }
   }
+  trySelectItem(item) {
+    if (0 <= item && item < this.items.length)
+      this.selectedItem = item;
+  }
+  tryCast(targetPosition) {
+    if (this.selectedItem < this.items.length) {
+      this.items[this.selectedItem].use(this, targetPosition);
+    }
+  }
 }

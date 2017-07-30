@@ -85,12 +85,17 @@ function loadLevel(levelData, loader) {
           case "d": wizard.movement += 1; break;
           case "w": wizard.jump(); break;
         }
+        if (event.key.length == 1 && "0" <= event.key && event.key <= "9")
+          wizard.trySelectItem(+event.key);
       });
       level.keyboard.on("keyup", function(event) {
         switch (event.key) {
           case "a": wizard.movement += 1; break;
           case "d": wizard.movement -= 1; break;
         }
+      });
+      level.on("mousedown", function(event) {
+        wizard.tryCast(level.mousePosition);
       });
       level.add(wizard);
       level.target = wizard;

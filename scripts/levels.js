@@ -1,12 +1,14 @@
 class Level extends Universe {
   constructor(json, pointHandlers, readyCallback) {
     super(json.displayName);
+    this.on("mousemove", event => this.adjustMouse(event));
     this.keyboard = new Keyboard(this);
     var barrier = new AsyncBarrier;
     this.horizon = loadImage(json.horizon, barrier.increment());
     this.scenery = loadImage(json.scenery, barrier.increment());
     this.target = null;
-    this.cameraPosition = new Vector(0, 0);
+    this.cameraPosition = new Vector(0, 0);  // In world coordinates.
+    this.mousePosition = new Vector(0, 0);  // In world coordinates.
     // Create all the boundaries.
     for (var i = 0, n = json.shapes.length; i < n; i++) {
       var shape = json.shapes[i];
@@ -32,6 +34,12 @@ class Level extends Universe {
       console.log("Level loaded.");
       readyCallback();
     });
+  }
+  adjustMouse(event) {
+    var center =
+        new Vector(Config.screen.width * 0.5, Config.screen.height * 0.5);
+    this.mousePosition =
+        this.cameraPosition.sub(center).add(new Vector(event.x, event.y));
   }
   update(delta) {
     if (this.target != null) {
@@ -271,8 +279,8 @@ var Levels = {
         670
       ],
       "monster": [
-        800,
-        670
+        3324,
+        1452,
       ],
       "health": [
         1030,

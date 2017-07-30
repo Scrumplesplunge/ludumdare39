@@ -1,8 +1,10 @@
 class Level extends Universe {
   constructor(json, pointHandlers, readyCallback) {
-    super();
+    super(json.displayName);
+    this.keyboard = new Keyboard(this);
     var barrier = new AsyncBarrier;
-    this.image = loadImage(json.imageName, barrier.increment());
+    this.horizon = loadImage(json.horizon, barrier.increment());
+    this.scenery = loadImage(json.scenery, barrier.increment());
     this.target = null;
     this.cameraPosition = new Vector(0, 0);
     // Create all the boundaries.
@@ -44,8 +46,9 @@ class Level extends Universe {
     context.save();
       var center = new Vector(canvas.width * 0.5, canvas.height * 0.5);
       var topLeft = this.cameraPosition.sub(center);
+      context.drawImage(this.horizon, 0, 0);
       context.drawImage(
-        this.image, Math.floor(topLeft.x), Math.floor(topLeft.y),
+        this.scenery, Math.floor(topLeft.x), Math.floor(topLeft.y),
         canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
       context.translate(-topLeft.x, -topLeft.y);
       super.draw(context);
@@ -55,7 +58,9 @@ class Level extends Universe {
 
 var Levels = {
   "demo": {
-    "imageName": "images/demo_level.png",
+    "displayName": "Demo Level",
+    "horizon": "images/horizon.png",
+    "scenery": "images/demo_level.png",
     "shapes": [
       [
         [

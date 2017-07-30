@@ -40,6 +40,7 @@ var Config = {
     height: 600,
   },
   showBoundaries: false,
+  successScreenTimeout: 2,
   updateDelay: 0.01,
   orbColor: "#00ff00",
   portalColor: "#00ffff",

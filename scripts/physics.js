@@ -49,11 +49,14 @@ class PhysicsObject extends EventManager {
   remove() { this.removed = true; }
 }
 
-class Universe {
-  constructor() {
+class Universe extends EventManager {
+  constructor(name) {
+    super(name);
     this.boundaries = [];
     this.effects = [];
     this.objects = [];
+    this.on("update", event => this.update(event.delta));
+    this.on("draw", event => this.draw(event.context));
   }
   add(x) {
     if (x instanceof Boundary) {

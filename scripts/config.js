@@ -51,4 +51,5 @@ var Config = {
     selection: "#ffffff",
   },
   rewardSpeed: 500,
+  spellSpeed: 500,
 };

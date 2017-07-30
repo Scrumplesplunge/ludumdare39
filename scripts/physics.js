@@ -6,7 +6,7 @@ class Boundary {
   constructor(a, b) {
     this.a = a;
     this.b = b;
-    this.removed = false;
+    this.universe = null;
   }
   allowedDirection() { return this.b.sub(this.a).rotate90(); }
   disallowedDirection() { return this.allowedDirection().neg(); }
@@ -16,7 +16,7 @@ class Boundary {
     context.lineTo(this.b.x, this.b.y);
     context.stroke();
   }
-  remove() { this.removed = true; }
+  remove() { this.universe = null; }
 }
 
 // Particles do nothing except move and look cool.
@@ -27,7 +27,7 @@ class Particle {
     this.position = position;
     this.velocity = velocity;
     this.lifetime = lifetime;
-    this.removed = false;
+    this.universe = null;
   }
   update(delta) {
     this.position = this.position.add(this.velocity.mul(delta));
@@ -39,7 +39,7 @@ class Particle {
     Sprites.sheet.particles.draw(
         context, this.sprite, x - r, y - r, 2 * r, 2 * r);
   }
-  remove() { this.removed = true; }
+  remove() { this.universe = null; }
 }
 
 // An effect is like a boundary, except that an intersection does not result in
@@ -48,14 +48,15 @@ class Effect extends EventManager {
   constructor(position, radius) {
     super("effect");
     this.position = position;
+    this.velocity = new Vector(0, 0);
     this.radius = radius;
-    this.removed = false;
+    this.universe = null;
   }
   activate(object) {
     throw new Error("No activate function provided for effect.");
   }
   draw(context) {}
-  remove() { this.removed = true; }
+  remove() { this.universe = null; }
 }
 
 // A physics object is something which collides with the world. They are
@@ -66,10 +67,10 @@ class PhysicsObject extends EventManager {
     this.position = position;
     this.velocity = new Vector(0, 0);
     this.radius = radius;
-    this.removed = false;
+    this.universe = null;
   }
   draw(context) { throw new Error("No draw function provided for object."); }
-  remove() { this.removed = true; }
+  remove() { this.universe = null; }
 }
 
 class Universe extends EventManager {
@@ -83,10 +84,13 @@ class Universe extends EventManager {
     this.on("draw", event => this.draw(event.context));
   }
   add(x) {
+    x.universe = this;
     if (x instanceof Boundary) {
       this.boundaries.push(x);
     } else if (x instanceof Effect) {
       this.effects.push(x);
+    } else if (x instanceof Particle) {
+      this.particles.push(x);
     } else if (x instanceof PhysicsObject) {
       this.objects.push(x);
     } else {
@@ -95,8 +99,10 @@ class Universe extends EventManager {
   }
   update(delta) {
     // Perform independent updates for all effects and objects.
-    this.effects.forEach(
-        effect => effect.trigger({type: "update", delta: delta}));
+    this.effects.forEach(function(effect) {
+      effect.trigger({type: "update", delta: delta});
+      effect.position = effect.position.add(effect.velocity.mul(delta));
+    });
     var gravity = new Vector(0, Config.gravity);
     this.particles.forEach(particle => particle.update(delta));
     this.objects.forEach(function(object) {
@@ -106,10 +112,10 @@ class Universe extends EventManager {
     });
     this.resolveCollisions();
     this.activateEffects();
-    removeIf(boundary => boundary.removed, this.boundaries);
-    removeIf(effect => effect.removed, this.effects);
-    removeIf(particle => particle.removed, this.particles);
-    removeIf(object => object.removed, this.objects);
+    removeIf(boundary => boundary.universe == null, this.boundaries);
+    removeIf(effect => effect.universe == null, this.effects);
+    removeIf(particle => particle.universe == null, this.particles);
+    removeIf(object => object.universe == null, this.objects);
   }
   randomParticles(position, maxRadius, count, speedFactor, maxLifetime) {
     for (var i = 0; i < count; i++) {
@@ -117,8 +123,7 @@ class Universe extends EventManager {
       var radius = maxRadius * Math.random();
       var velocity = Vector.random().mul(speedFactor);
       var lifetime = maxLifetime * Math.random();
-      this.particles.push(
-          new Particle(sprite, radius, position, velocity, lifetime));
+      this.add(new Particle(sprite, radius, position, velocity, lifetime));
     }
   }
   resolveCollisions() {

@@ -38,11 +38,36 @@ class Health extends Effect {
   }
 }
 
+class TransformCast extends Effect {
+  constructor(position, direction) {
+    super(position, 20);
+    this.lifetime = 3;  // Limit the lifetime of the spell for performance.
+    this.on("update", event => this.update(event.delta));
+    this.velocity = direction.mul(Config.spellSpeed);
+  }
+  update(delta) {
+    this.universe.randomParticles(this.position, 20, 3, 100, 0.2);
+    this.lifetime -= delta;
+    if (this.lifetime < 0) this.remove();
+  }
+  activate(object) {
+    if (object instanceof Monster) {
+      console.log("Hit monster.");
+      this.universe.randomParticles(object.position, 30, 50, 100, 0.5);
+      object.remove();
+      this.remove();
+    }
+  }
+}
+
 class TransformSpell extends Item {
   constructor(position) {
     super(Sprites.codes.items.transformSpell, position, 10, 20);
   }
-  use(wizard, targetPosition) { console.log("Wizard cast transform!"); }
+  use(wizard, targetPosition) {
+    var spellDirection = targetPosition.sub(wizard.position).normalized();
+    wizard.universe.add(new TransformCast(wizard.position, spellDirection));
+  }
 }
 
 // A reward is something that a wizard already earned, but they don't get it

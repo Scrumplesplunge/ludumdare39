@@ -147,7 +147,7 @@ class Universe {
       var object = this.objects[i];
       if (object.removed) continue;
       for (var j = 0, m = this.effects.length; j < m; j++) {
-        var effect = this.effects[i];
+        var effect = this.effects[j];
         if (effect.removed) continue;
         var offset = effect.position.sub(object.position);
         var combinedRadius = object.radius + effect.radius;

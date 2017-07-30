@@ -1,6 +1,7 @@
 var demoState = new EventManager("demo");
 var horizon;
 var wizard;
+var monster;
 
 var pointHandlers = {
   "player": function(level, position, callback) {
@@ -9,6 +10,11 @@ var pointHandlers = {
     level.add(wizard);
     level.target = wizard;
     level.cameraPosition = position;
+    schedule(callback);
+  },
+  "monster": function(level, position, callback) {
+    monster = new Monster(position);
+    level.add(monster);
     schedule(callback);
   },
   "orb": function(level, position, callback) {
@@ -29,6 +35,12 @@ Game.startState.on("enter", function(event) {
 var focus = new Vector(0, 0);
 demoState.on("update", function(event) {
   level.update(Config.updateDelay);
+  var offset = wizard.position.x - monster.position.x;
+  if (Math.abs(offset) > 100) {
+    monster.movement = offset < 0 ? -1 : 1;
+  } else {
+    monster.movement = 0;
+  }
 });
 
 var keyboard = new Keyboard(demoState);

@@ -1,8 +1,11 @@
 class Creature extends PhysicsObject {
-  constructor(position, config) {
+  constructor(position, type) {
     super(position, 28);
 
-    this.config = config;
+    if (!Config.creatures.hasOwnProperty(type))
+      throw Error("No creature configuration for creature type " + type);
+    this.creatureType = type;
+    this.config = Config.creatures[type];
 
     // These properties are expected to be set by external code.
     this.movement = 0;  // -1 for left, 0 for stationary, 1 for right.
@@ -68,12 +71,12 @@ class Creature extends PhysicsObject {
     if (boundary.allowedDirection().y < 0) this.currentlyOnGround = true;
   }
   onGround() { return this.previouslyOnGround || this.currentlyOnGround; }
-  jump() { if (this.onGround()) this.velocity.y = this.config.jumpSpeed; }
+  jump() { if (this.onGround()) this.velocity.y = -this.config.jumpSpeed; }
   draw(context) {
     var part = Sprites.codes.creature.part;
     var parts = this.bones ? [part.bones] : [part.shoes, part.skin, part.robe];
     parts.forEach(part => {
-      Sprites.sheet.wizard.draw(
+      Sprites.sheet[this.creatureType].draw(
           context, this.sprite + part,
           this.position.x - 32, this.position.y - 32, 64, 64);
     });

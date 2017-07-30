@@ -40,14 +40,18 @@ class SpriteSheet {
 }
 
 class CreatureSpriteSheet extends SpriteSheet {
-  constructor(filename, callback) {
-    super(filename, () => this.spriteSheetReady(callback));
+  constructor(type, callback) {
+    if (!Config.creatures.hasOwnProperty(type))
+      throw Error("No creature config for creature type " + type);
+    super("images/" + type + ".png", () => this.spriteSheetReady(callback));
+    this.creatureType = type;
   }
   spriteSheetReady(callback) {
-    this.setColors(Config.wizard.color.bones,
-                   Config.wizard.color.robe,
-                   Config.wizard.color.shoes,
-                   Config.wizard.color.skin);
+    var config = Config.creatures[this.creatureType];
+    this.setColors(config.color.bones,
+                   config.color.robe,
+                   config.color.shoes,
+                   config.color.skin);
     callback();
   }
   setColors(bones, robe, shoes, skin) {
@@ -121,10 +125,8 @@ var Sprites = (function() {
   function load(callback) {
     console.log("Loading sprites...");
     var barrier = new AsyncBarrier;
-    sheet.wizard =
-        new CreatureSpriteSheet("images/wizard.png", barrier.increment());
-    sheet.monster =
-        new CreatureSpriteSheet("images/monster.png", barrier.increment());
+    sheet.wizard = new CreatureSpriteSheet("wizard", barrier.increment());
+    sheet.monster = new CreatureSpriteSheet("monster", barrier.increment());
     sheet.items = new ItemSpriteSheet("images/items.png", barrier.increment());
     barrier.wait(function() {
       console.log("All sprites loaded.");

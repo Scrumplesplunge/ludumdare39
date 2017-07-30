@@ -1,6 +1,6 @@
 class Wizard extends Creature {
   constructor(position) {
-    super(position, Config.wizard);
+    super(position, "wizard");
     this.items = [];  // Things collected by the wizard.
   }
   give(item) {

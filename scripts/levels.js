@@ -287,8 +287,8 @@ var Levels = {
         650
       ],
       "transformSpell": [
-        2775,
-        1300,
+        1700,
+        1460
       ],
       "portal": [
         3400,

@@ -50,6 +50,11 @@ function drawStatus(event) {
         var maxWidth = Config.screen.width - 20;
         fillStyle = "#ff0000";
         fillRect(10, Config.screen.height - 30, fraction * maxWidth, 20);
+        if (wizard.selectedItem < wizard.items.length) {
+          Sprites.sheet.items.draw(
+              event.context, Sprites.codes.items.selection,
+              10 + 64 * wizard.selectedItem, Config.screen.height - 94, 64, 64);
+        }
         for (var i = 0, n = wizard.items.length; i < n; i++) {
           Sprites.sheet.items.draw(event.context, wizard.items[i].sprite,
                                    10 + 64 * i, Config.screen.height - 94,

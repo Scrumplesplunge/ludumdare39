@@ -48,6 +48,7 @@ var Config = {
     health: "#ff0000",
     portal: "#00ffff",
     transformSpell: "#ffff00",
+    selection: "#ffffff",
   },
   rewardSpeed: 500,
 };

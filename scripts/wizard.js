@@ -2,6 +2,7 @@ class Wizard extends Creature {
   constructor(position) {
     super(position, "wizard");
     this.items = [];  // Things collected by the wizard.
+    this.selectedItem = 0;
     this.life = Config.creatures.wizard.maxLife;
   }
   update(delta) {

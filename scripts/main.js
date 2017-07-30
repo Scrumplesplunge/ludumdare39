@@ -12,7 +12,7 @@ var pointHandlers = {
     schedule(callback);
   },
   "orb": function(level, position, callback) {
-    level.add(new Item(Sprites.items.orb, position, 10, 20));
+    level.add(new Item(Sprites.codes.items.orb, position, 10, 20));
     schedule(callback);
   },
 };

@@ -4,8 +4,8 @@ class Wizard extends PhysicsObject {
     // -1 for left, 0 for stationary, 1 for right.
     this.movement = 0;
     this.previousMovement = 0;
-    this.direction = Sprites.wizard.direction.right;
-    this.state = Sprites.wizard.state.stationary;
+    this.direction = Sprites.codes.wizard.direction.right;
+    this.state = Sprites.codes.wizard.state.stationary;
     this.sprite = this.direction + this.state;
     this.animationTime = 0;
     this.currentlyOnGround = false;
@@ -15,6 +15,7 @@ class Wizard extends PhysicsObject {
     this.on("collide", event => this.collide(event.boundary));
   }
   update(delta) {
+    var codes = Sprites.codes.wizard;
     this.previouslyOnGround = this.currentlyOnGround;
     this.currentlyOnGround = false;
     this.animationTime += delta;
@@ -25,23 +26,23 @@ class Wizard extends PhysicsObject {
       this.animationTime = 0;
       switch (this.movement) {
         case -1:
-          this.direction = Sprites.wizard.direction.left;
-          this.state = Sprites.wizard.state.running;
+          this.direction = codes.direction.left;
+          this.state = codes.state.running;
           break;
         case 0:
           // Leave the direction untouched.
-          this.state = Sprites.wizard.state.stationary;
+          this.state = codes.state.stationary;
           break;
         case 1:
-          this.direction = Sprites.wizard.direction.right;
-          this.state = Sprites.wizard.state.running;
+          this.direction = codes.direction.right;
+          this.state = codes.state.running;
           break;
       }
     }
     this.previousMovement = this.movement;
     // Select the appropriate sprite from the animation.
     if (!this.onGround()) {
-      this.sprite = this.direction + Sprites.wizard.state.jumping;
+      this.sprite = this.direction + codes.state.jumping;
     } else if (this.state instanceof Array) {
       var phase = Math.floor(Config.animationFrameRate * this.animationTime);
       this.sprite = this.direction + this.state[phase % this.state.length];
@@ -61,12 +62,16 @@ class Wizard extends PhysicsObject {
     this.items.push(item);
   }
   draw(context) {
-    Sprites.draw(context, this.sprite + Sprites.wizard.part.shoes,
-                 this.position.x - 32, this.position.y - 32, 64, 64);
-    Sprites.draw(context, this.sprite + Sprites.wizard.part.skin,
-                 this.position.x - 32, this.position.y - 32, 64, 64);
-    Sprites.draw(context, this.sprite + Sprites.wizard.part.robe,
-                 this.position.x - 32, this.position.y - 32, 64, 64);
+    var codes = Sprites.codes.wizard;
+    Sprites.sheet.wizard.draw(
+        context, this.sprite + codes.part.shoes,
+        this.position.x - 32, this.position.y - 32, 64, 64);
+    Sprites.sheet.wizard.draw(
+        context, this.sprite + codes.part.skin,
+        this.position.x - 32, this.position.y - 32, 64, 64);
+    Sprites.sheet.wizard.draw(
+        context, this.sprite + codes.part.robe,
+        this.position.x - 32, this.position.y - 32, 64, 64);
   }
 }
 
@@ -86,7 +91,8 @@ class Item extends Effect {
   }
   draw(context) {
     var x = this.position.x, y = this.position.y, r = this.spriteRadius;
-    Sprites.draw(context, this.sprite, x - r, y - r, 2 * r, 2 * r);
+    Sprites.sheet.wizard.draw(
+        context, this.sprite, x - r, y - r, 2 * r, 2 * r);
   }
 }
 

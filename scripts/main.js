@@ -7,32 +7,10 @@ var level;
 var portal;
 
 // This is the sequence of levels that occur after the tutorial level.
-var currentLevelData = Levels.level1;
+var currentLevelData = Levels.tutorial;
 var levelSequence = [
   Levels.level1,
 ];
-
-class Portal extends Effect {
-  constructor(position) {
-    super(position, 10);
-    this.animationTime = 0;
-    this.on("update", event => this.animationTime += event.delta);
-  }
-  activate(object) {
-    if (object instanceof Wizard) {
-      console.log("Portal reached.");
-      object.remove();
-      Game.switchState(successState);
-    }
-  }
-  draw(context) {
-    var portal = Sprites.codes.items.portal;
-    var phase = Math.floor(Config.animationFrameRate * this.animationTime);
-    var sprite = portal[phase % portal.length];
-    var x = this.position.x, y = this.position.y, r = 50;
-    Sprites.sheet.items.draw(context, sprite, x - r, y - r, 2 * r, 2 * r);
-  }
-}
 
 function drawStatus(event) {
   with (event.context) {
@@ -87,7 +65,7 @@ function loadLevel(levelData, loader) {
           case "w": wizard.jump(); break;
         }
         if (event.key.length == 1 && "0" <= event.key && event.key <= "9")
-          wizard.trySelectItem(+event.key);
+          wizard.trySelectItem(event.key - 1);
       });
       level.keyboard.on("keyup", function(event) {
         switch (event.key) {
@@ -119,8 +97,17 @@ function loadLevel(levelData, loader) {
       level.add(new TransformSpell(position));
       schedule(callback);
     },
+    "portalActivateSpell": function(level, position, callback) {
+      level.add(new PortalActivateSpell(position));
+      schedule(callback);
+    },
     "portal": function(level, position, callback) {
-      portal = new Portal(position);
+      portal = new Portal(position, successState);
+      level.add(portal);
+      schedule(callback);
+    },
+    "inactivePortal": function(level, position, callback) {
+      portal = new InactivePortal(position, successState);
       level.add(portal);
       schedule(callback);
     },

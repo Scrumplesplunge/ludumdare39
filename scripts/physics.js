@@ -65,6 +65,7 @@ class PhysicsObject extends EventManager {
   constructor(position, radius) {
     super("physicsobject");
     this.position = position;
+    this.immovable = false;
     this.velocity = new Vector(0, 0);
     this.radius = radius;
     this.universe = null;
@@ -107,8 +108,10 @@ class Universe extends EventManager {
     this.particles.forEach(particle => particle.update(delta));
     this.objects.forEach(function(object) {
       object.trigger({type: "update", delta: delta});
-      object.velocity = object.velocity.add(gravity);
-      object.position = object.position.add(object.velocity.mul(delta));
+      if (!object.immovable) {
+        object.velocity = object.velocity.add(gravity);
+        object.position = object.position.add(object.velocity.mul(delta));
+      }
     });
     this.resolveCollisions();
     this.activateEffects();

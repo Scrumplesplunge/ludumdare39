@@ -67,14 +67,37 @@ class TransformCast extends SpellCast {
   }
 }
 
-class TransformSpell extends Item {
-  constructor(position) {
-    super(Sprites.codes.items.transformSpell, position, 10, 20);
+class Spell extends Item {
+  constructor(position, name, cast) {
+    if (!Sprites.codes.items.hasOwnProperty(name))
+      throw Error("No sprite for spell " + name);
+    super(Sprites.codes.items[name], position, 10, 20);
+    this.cast = cast;
   }
   use(wizard, targetPosition) {
     var spellDirection = targetPosition.sub(wizard.position).normalized();
-    wizard.universe.add(new TransformCast(wizard.position, spellDirection));
+    wizard.universe.add(new this.cast(wizard.position, spellDirection));
     wizard.hurt(Config.spellCost);
+  }
+}
+
+class TransformSpell extends Spell {
+  constructor(position) { super(position, "transformSpell", TransformCast); }
+}
+
+class PortalActivateCast extends SpellCast {
+  constructor(position, direction) { super(position, direction); }
+  activate(object) {
+    if (object instanceof InactivePortal) {
+      object.activatePortal();
+      this.remove();
+    }
+  }
+}
+
+class PortalActivateSpell extends Spell {
+  constructor(position) {
+    super(position, "portalActivateSpell", PortalActivateCast);
   }
 }
 

@@ -783,7 +783,7 @@ var Levels = {
       ],
     ],
     "points": {
-      "portal": [
+      "inactivePortal": [
         3343,
         1014.5
       ],
@@ -802,6 +802,10 @@ var Levels = {
       "transformSpell": [
         770,
         1700
+      ],
+      "portalActivateSpell": [
+        800,
+        870
       ]
     }
   }

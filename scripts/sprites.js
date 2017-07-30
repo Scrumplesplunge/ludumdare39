@@ -94,6 +94,8 @@ class ItemSpriteSheet extends SpriteSheet {
     context.fillRect(0, 64, 64, 64);
     context.fillStyle = Config.itemColor.selection;
     context.fillRect(64, 64, 64, 64);
+    context.fillStyle = Config.itemColor.portal;
+    context.fillRect(128, 64, 384, 64);
     this.setColorMap(colorMap);
     console.log("Item sprites loaded.");
     callback();
@@ -170,6 +172,8 @@ var Sprites = (function() {
       portal: [1, 2, 3, 4, 5, 6, 7],
       transformSpell: 8,
       selection: 9,
+      portalActivateSpell: 10,
+      inactivePortal: [11, 12, 13, 14, 15],
     },
     particles: [0, 1, 2, 3, 4, 5],
   };

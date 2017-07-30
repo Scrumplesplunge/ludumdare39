@@ -35,15 +35,20 @@ class Portal extends Effect {
   }
 }
 
-function drawLifeBar(event) {
-  // Render the life bar.
-  if (wizard.removed) return;
-  var fraction = wizard.life / Config.creatures.wizard.maxLife;
-  var maxWidth = Config.screen.width - 20;
+function drawStatus(event) {
   with (event.context) {
     save();
-      fillStyle = "#ff0000";
-      fillRect(10, Config.screen.height - 30, fraction * maxWidth, 20);
+      font = "20pt sans-serif";
+      textBaseline = "top";
+      fillStyle = "#000000";
+      fillText("Level: " + level.name, 10, 10);
+      if (!wizard.removed) {
+        // Render the life bar.
+        var fraction = wizard.life / Config.creatures.wizard.maxLife;
+        var maxWidth = Config.screen.width - 20;
+        fillStyle = "#ff0000";
+        fillRect(10, Config.screen.height - 30, fraction * maxWidth, 20);
+      }
     restore();
   }
 }
@@ -53,7 +58,7 @@ function configureLevel(level) {
   level.keyboard.on("keydown", function(event) {
     if (event.key == "Escape") Game.switchState(pauseState);
   });
-  level.on("draw", drawLifeBar);
+  level.on("draw", drawStatus);
 }
 
 function loadLevel(levelData, loader) {

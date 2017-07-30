@@ -13,9 +13,10 @@ class GameState {
   switchTo(newState) {
     console.log("Switching from " + this.currentState.name + " to " +
                 newState.name);
-    this.currentState.trigger({type: "leave"});
+    this.currentState.trigger({type: "leave", to: newState});
+    var oldState = this.currentState;
     this.currentState = newState;
-    this.currentState.trigger({type: "enter"});
+    this.currentState.trigger({type: "enter", from: oldState});
   }
   trigger(event) {
     this.globalEventManager.trigger(event);

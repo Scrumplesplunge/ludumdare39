@@ -1,5 +1,6 @@
 var deathState = new EventManager("death");
 var successState = new EventManager("success");
+var pauseState = new EventManager("pause");
 var endState = new EventManager("end");
 var horizon;
 var wizard;
@@ -49,6 +50,9 @@ function drawLifeBar(event) {
 
 function configureLevel(level) {
   level.on("enter", () => monster.target = wizard);
+  level.keyboard.on("keydown", function(event) {
+    if (event.key == "Escape") Game.switchState(pauseState);
+  });
   level.on("draw", drawLifeBar);
 }
 
@@ -170,6 +174,20 @@ successState.on("draw", function(event) {
   drawOverlay(event.context, "#00ff00", "Success!",
               "Continuing in " + successStateTimeout.toFixed(1) +
               " seconds...");
+});
+
+var previousState;  // Stores the state that we paused from.
+pauseState.on("enter", function(event) {
+  previousState = event.from;
+});
+
+pauseState.on("keydown", function(event) {
+  if (event.key == "Escape") Game.switchState(previousState);
+});
+
+pauseState.on("draw", function(event) {
+  level.trigger(event);
+  drawOverlay(event.context, "#ffffff", "Paused", "Press ESC to resume.");
 });
 
 endState.on("update", function(event) {

@@ -11,6 +11,7 @@ class Wizard extends PhysicsObject {
     this.currentlyOnGround = false;
     this.previouslyOnGround = false;
     this.items = [];
+    this.bones = false;  // If true, show only the bones of the wizard.
     this.on("update", event => this.update(event.delta));
     this.on("collide", event => this.collide(event.boundary));
   }
@@ -62,16 +63,13 @@ class Wizard extends PhysicsObject {
     this.items.push(item);
   }
   draw(context) {
-    var codes = Sprites.codes.wizard;
-    Sprites.sheet.wizard.draw(
-        context, this.sprite + codes.part.shoes,
-        this.position.x - 32, this.position.y - 32, 64, 64);
-    Sprites.sheet.wizard.draw(
-        context, this.sprite + codes.part.skin,
-        this.position.x - 32, this.position.y - 32, 64, 64);
-    Sprites.sheet.wizard.draw(
-        context, this.sprite + codes.part.robe,
-        this.position.x - 32, this.position.y - 32, 64, 64);
+    var part = Sprites.codes.wizard.part;
+    var parts = this.bones ? [part.bones] : [part.shoes, part.skin, part.robe];
+    parts.forEach(part => {
+      Sprites.sheet.wizard.draw(
+          context, this.sprite + part,
+          this.position.x - 32, this.position.y - 32, 64, 64);
+    });
   }
 }
 

@@ -18,6 +18,7 @@ var Config = {
   updateDelay: 0.01,
   wizard: {
     color: {
+      bones: "#5c5c5c",
       robe: "#5c5c5c",
       shoes: "#1c1c1c",
       skin: "#acacac",

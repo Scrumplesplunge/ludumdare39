@@ -42,29 +42,31 @@ class WizardSpriteSheet extends SpriteSheet {
     super(filename, () => this.spriteSheetReady(callback));
   }
   spriteSheetReady(callback) {
-    this.setColors(Config.wizard.color.robe,
+    this.setColors(Config.wizard.color.bones,
+                   Config.wizard.color.robe,
                    Config.wizard.color.shoes,
                    Config.wizard.color.skin);
     console.log("Wizard sprites loaded.");
     callback();
   }
-  setColors(robe, shoes, skin) {
+  setColors(bones, robe, shoes, skin) {
     var colorMap = document.createElement("canvas");
     colorMap.width = this.image.width;
     colorMap.height = this.image.height;
     var context = colorMap.getContext("2d");
     // Set the colours from the config.
-    context.fillStyle = robe;
+    context.fillStyle = bones;
     context.fillRect(0, 0, 512, 64);
-    context.fillRect(0, 192, 512, 64);
-    context.fillStyle = shoes;
-    context.fillRect(0, 64, 512, 64);
     context.fillRect(0, 256, 512, 64);
-    context.fillStyle = skin;
-    context.fillRect(0, 128, 512, 64);
+    context.fillStyle = robe;
+    context.fillRect(0, 64, 512, 64);
     context.fillRect(0, 320, 512, 64);
-    context.fillStyle = Config.orbColor;
-    context.fillRect(0, 384, 64, 64);
+    context.fillStyle = shoes;
+    context.fillRect(0, 128, 512, 64);
+    context.fillRect(0, 384, 512, 64);
+    context.fillStyle = skin;
+    context.fillRect(0, 192, 512, 64);
+    context.fillRect(0, 448, 512, 64);
     this.setColorMap(colorMap);
   }
 }
@@ -96,12 +98,13 @@ var Sprites = (function() {
     wizard: {
       direction: {
         right: 0,
-        left: 24,
+        left: 32,
       },
       part: {
-        robe: 0,
-        shoes: 8,
-        skin: 16,
+        bones: 0,
+        robe: 8,
+        shoes: 16,
+        skin: 24,
       },
       state: {
         stationary: 0,

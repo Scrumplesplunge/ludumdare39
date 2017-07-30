@@ -117,8 +117,9 @@ var Sprites = (function() {
   function load(callback) {
     console.log("Loading sprites...");
     var barrier = new AsyncBarrier;
-    sheet.wizard = new WizardSpriteSheet("wizard.png", barrier.increment());
-    sheet.items = new ItemSpriteSheet("items.png", barrier.increment());
+    sheet.wizard =
+        new WizardSpriteSheet("images/wizard.png", barrier.increment());
+    sheet.items = new ItemSpriteSheet("images/items.png", barrier.increment());
     barrier.wait(function() {
       console.log("All sprites loaded.");
       callback();

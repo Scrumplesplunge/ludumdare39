@@ -20,7 +20,7 @@ var pointHandlers = {
 Game.startState.on("enter", function(event) {
   var loader = new Loader("loader");
   level = new Level(Levels.demo, pointHandlers, loader.loaded("level"));
-  horizon = loader.loadImage("horizon.png");
+  horizon = loader.loadImage("images/horizon.png");
   Sprites.load(loader.loaded("sprites"));
   loader.waitUntilLoaded(() => Game.switchState(demoState));
   Game.switchState(loader);

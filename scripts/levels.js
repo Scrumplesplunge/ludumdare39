@@ -55,7 +55,7 @@ class Level extends Universe {
 
 var Levels = {
   "demo": {
-    "imageName": "demo_level.png",
+    "imageName": "images/demo_level.png",
     "shapes": [
       [
         [

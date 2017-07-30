@@ -41,7 +41,7 @@ Game.startState.on("enter", function(event) {
 
   var barrier = new AsyncBarrier;
   Sprites.load(barrier.increment());
-  horizon = loadImage("horizon.png", barrier.increment());
+  horizon = loadImage("images/horizon.png", barrier.increment());
   barrier.wait(() => Game.switchState(builderState));
 });
 

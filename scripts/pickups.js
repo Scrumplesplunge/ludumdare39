@@ -6,7 +6,7 @@ class Item extends Effect {
     this.spriteRadius = spriteRadius || radius;
   }
   activate(object) {
-    console.log("Activated!");
+    console.log("Item collected.");
     if (object instanceof Wizard) {
       object.give(this);
       this.remove();
@@ -15,6 +15,25 @@ class Item extends Effect {
   draw(context) {
     var x = this.position.x, y = this.position.y, r = this.spriteRadius;
     Sprites.sheet.items.draw(context, this.sprite, x - r, y - r, 2 * r, 2 * r);
+  }
+}
+
+class Health extends Effect {
+  constructor(position, amount) {
+    super(position, 10);
+    this.amount = amount;
+  }
+  activate(object) {
+    if (object instanceof Wizard) {
+      console.log("Health +" + this.amount);
+      object.heal(this.amount);
+      this.remove();
+    }
+  }
+  draw(context) {
+    var x = this.position.x, y = this.position.y, r = 20;
+    Sprites.sheet.items.draw(
+        context, Sprites.codes.items.orb, x - r, y - r, 2 * r, 2 * r);
   }
 }
 

@@ -22,7 +22,7 @@ function loadLevel(level, loader) {
       schedule(callback);
     },
     "orb": function(level, position, callback) {
-      level.add(new Item(Sprites.codes.items.orb, position, 10, 20));
+      level.add(new Health(position, 50));
       schedule(callback);
     },
   };
@@ -68,13 +68,26 @@ keyboard.on("keyup", function(event) {
   }
 });
 
+function showLifeBar(event) {
+  var fraction = wizard.life / Config.creatures.wizard.maxLife;
+  var maxWidth = Config.screen.width - 20;
+  event.context.save();
+    event.context.fillStyle = "#ff0000";
+    event.context.fillRect(
+        10, Config.screen.height - 30, fraction * maxWidth, 20);
+  event.context.save();
+}
+
 function draw(event) {
   var canvas = event.context.canvas;
   event.context.drawImage(horizon, 0, 0);
   level.draw(event.context);
 }
 
-runState.on("draw", draw);
+runState.on("draw", function(event) {
+  draw(event);
+  showLifeBar(event);
+});
 
 var deathStateTimeout = 0;
 deathState.on("enter", function(event) {

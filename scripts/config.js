@@ -19,6 +19,7 @@ var Config = {
         shoes: "#1c1c1c",
         skin: "#acacac",
       },
+      maxLife: 100,
       jumpSpeed: 750,
       lifeLostPerSecond: 10,
       speed: 300,

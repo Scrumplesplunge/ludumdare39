@@ -44,7 +44,10 @@ var Config = {
   showBoundaries: false,
   successScreenTimeout: 2,
   updateDelay: 0.01,
-  orbColor: "#00ff00",
-  portalColor: "#00ffff",
+  itemColor: {
+    health: "#ff0000",
+    portal: "#00ffff",
+    transformSpell: "#ffff00",
+  },
   rewardSpeed: 500,
 };

@@ -38,16 +38,23 @@ class Portal extends Effect {
 function drawStatus(event) {
   with (event.context) {
     save();
+      // Write the level name at the top.
       font = "20pt sans-serif";
       textBaseline = "top";
       fillStyle = "#000000";
       fillText("Level: " + level.name, 10, 10);
+
       if (!wizard.removed) {
         // Render the life bar.
         var fraction = wizard.life / Config.creatures.wizard.maxLife;
         var maxWidth = Config.screen.width - 20;
         fillStyle = "#ff0000";
         fillRect(10, Config.screen.height - 30, fraction * maxWidth, 20);
+        for (var i = 0, n = wizard.items.length; i < n; i++) {
+          Sprites.sheet.items.draw(event.context, wizard.items[i].sprite,
+                                   10 + 64 * i, Config.screen.height - 94,
+                                   64, 64);
+        }
       }
     restore();
   }
@@ -90,8 +97,12 @@ function loadLevel(levelData, loader) {
       level.add(monster);
       schedule(callback);
     },
-    "orb": function(level, position, callback) {
+    "health": function(level, position, callback) {
       level.add(new Health(position, 50));
+      schedule(callback);
+    },
+    "transformSpell": function(level, position, callback) {
+      level.add(new TransformSpell(position));
       schedule(callback);
     },
     "portal": function(level, position, callback) {

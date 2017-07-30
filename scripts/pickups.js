@@ -12,6 +12,7 @@ class Item extends Effect {
       this.remove();
     }
   }
+  use(wizard) { return Error("No method for use defined."); }
   draw(context) {
     var x = this.position.x, y = this.position.y, r = this.spriteRadius;
     Sprites.sheet.items.draw(context, this.sprite, x - r, y - r, 2 * r, 2 * r);
@@ -33,8 +34,15 @@ class Health extends Effect {
   draw(context) {
     var x = this.position.x, y = this.position.y, r = 20;
     Sprites.sheet.items.draw(
-        context, Sprites.codes.items.orb, x - r, y - r, 2 * r, 2 * r);
+        context, Sprites.codes.items.health, x - r, y - r, 2 * r, 2 * r);
   }
+}
+
+class TransformSpell extends Item {
+  constructor(position) {
+    super(Sprites.codes.items.transformSpell, position, 10, 20);
+  }
+  use(wizard) { console.log("Wizard cast transform!"); }
 }
 
 // A reward is something that a wizard already earned, but they don't get it

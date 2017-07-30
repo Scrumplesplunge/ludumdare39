@@ -86,10 +86,12 @@ class ItemSpriteSheet extends SpriteSheet {
     colorMap.height = this.image.height;
     var context = colorMap.getContext("2d");
     // Set the colours from the config.
-    context.fillStyle = Config.orbColor;
+    context.fillStyle = Config.itemColor.health;
     context.fillRect(0, 0, 64, 64);
-    context.fillStyle = Config.portalColor;
+    context.fillStyle = Config.itemColor.portal;
     context.fillRect(64, 0, 448, 64);
+    context.fillStyle = Config.itemColor.transformSpell;
+    context.fillRect(0, 64, 64, 64);
     this.setColorMap(colorMap);
     console.log("Item sprites loaded.");
     callback();
@@ -120,8 +122,9 @@ var Sprites = (function() {
       },
     },
     items: {
-      orb: 0,
+      health: 0,
       portal: [1, 2, 3, 4, 5, 6, 7],
+      transformSpell: 8,
     },
   };
 

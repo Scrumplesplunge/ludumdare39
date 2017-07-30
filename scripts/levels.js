@@ -274,9 +274,13 @@ var Levels = {
         800,
         670
       ],
-      "orb": [
+      "health": [
         1030,
         650
+      ],
+      "transformSpell": [
+        2775,
+        1300,
       ],
       "portal": [
         3400,

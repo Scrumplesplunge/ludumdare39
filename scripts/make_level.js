@@ -36,12 +36,12 @@ Game.startState.on("enter", function(event) {
   Config.showBoundaries = true;
 
   image.addEventListener("change", function() {
-    loadLevelImage(image.files[0].name);
+    loadLevelImage("images/" + image.files[0].name);
   });
 
   var barrier = new AsyncBarrier;
   Sprites.load(barrier.increment());
-  horizon = loadImage("images/horizon.png", barrier.increment());
+  horizon = loadImage("images/red_horizon.png", barrier.increment());
   barrier.wait(() => Game.switchState(builderState));
 });
 
@@ -126,7 +126,6 @@ builderState.on("draw", function(event) {
     var offset = center.sub(focus);
     event.context.translate(offset.x, offset.y);
     if (levelImage) event.context.drawImage(levelImage, 0, 0);
-    event.context.fillRect(targetPosition.x, targetPosition.y, 10, 10);
     // Draw all pre-defined boundaries.
     for (var i = 0, n = levelData.shapes.length; i < n; i++) {
       var shape = levelData.shapes[i];

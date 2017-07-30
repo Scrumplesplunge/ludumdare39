@@ -49,6 +49,7 @@ var Config = {
     smallFontSize: 20,
     history: 5,
   },
+  monsterSpawnerCooldown: 1,
   screen: {
     width: 800,
     height: 600,

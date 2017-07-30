@@ -2,16 +2,14 @@ var deathState = new EventManager("death");
 var successState = new EventManager("success");
 var pauseState = new EventManager("pause");
 var endState = new EventManager("end");
-var horizon;
 var wizard;
-var monster;
 var level;
 var portal;
 
 // This is the sequence of levels that occur after the tutorial level.
-var currentLevelData = Levels.tutorial;
+var currentLevelData = Levels.level1;
 var levelSequence = [
-  Levels.tutorial,
+  Levels.level1,
 ];
 
 class Portal extends Effect {
@@ -67,7 +65,6 @@ function drawStatus(event) {
 }
 
 function configureLevel(level) {
-  level.on("enter", () => monster.target = wizard);
   level.keyboard.on("keydown", function(event) {
     if (event.key == "Escape") Game.switchState(pauseState);
   });
@@ -107,8 +104,11 @@ function loadLevel(levelData, loader) {
       schedule(callback);
     },
     "monster": function(level, position, callback) {
-      monster = new Monster(position);
-      level.add(monster);
+      level.add(new Monster(position, null));
+      schedule(callback);
+    },
+    "monsterSpawner": function(level, position, callback) {
+      level.add(new MonsterSpawner(position, 200, 10));
       schedule(callback);
     },
     "health": function(level, position, callback) {
@@ -132,7 +132,6 @@ function loadLevel(levelData, loader) {
 
 Game.startState.on("enter", function(event) {
   var loader = new Loader("loader");
-  horizon = loader.loadImage("images/horizon.png");
   Sprites.load(loader.loaded("sprites"));
   level = loadLevel(currentLevelData, loader);
   loader.waitUntilLoaded(() => Game.switchState(level));

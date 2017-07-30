@@ -129,11 +129,11 @@ class Universe extends EventManager {
   resolveCollisions() {
     for (var i = 0, n = this.objects.length; i < n; i++) {
       var object = this.objects[i];
-      if (object.removed) continue;
+      if (object.universe == null) continue;
       var radius = object.radius;
       for (var j = 0, m = this.boundaries.length; j < m; j++) {
         var boundary = this.boundaries[j];
-        if (boundary.removed) continue;
+        if (boundary.universe == null) continue;
         // Compute where the object is relative to the boundary.
         var lineDirection = boundary.b.sub(boundary.a);
         var offsetA = object.position.sub(boundary.a);
@@ -189,10 +189,10 @@ class Universe extends EventManager {
   activateEffects() {
     for (var i = 0, n = this.objects.length; i < n; i++) {
       var object = this.objects[i];
-      if (object.removed) continue;
+      if (object.universe == null) continue;
       for (var j = 0, m = this.effects.length; j < m; j++) {
         var effect = this.effects[j];
-        if (effect.removed) continue;
+        if (effect.universe == null) continue;
         var offset = effect.position.sub(object.position);
         var combinedRadius = object.radius + effect.radius;
         if (offset.squareLength() < combinedRadius * combinedRadius)

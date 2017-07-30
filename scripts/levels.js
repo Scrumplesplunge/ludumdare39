@@ -65,10 +65,10 @@ class Level extends Universe {
 }
 
 var Levels = {
-  "demo": {
-    "displayName": "Demo Level",
+  tutorial: {
+    "displayName": "Tutorial Level",
     "horizon": "images/horizon.png",
-    "scenery": "images/demo_level.png",
+    "scenery": "images/tutorial_level.png",
     "shapes": [
       [
         [

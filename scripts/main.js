@@ -8,9 +8,10 @@ var monster;
 var level;
 var portal;
 
-// This is the sequence of levels that occur after the demo level.
+// This is the sequence of levels that occur after the tutorial level.
+var currentLevelData = Levels.tutorial;
 var levelSequence = [
-  Levels.demo,
+  Levels.tutorial,
 ];
 
 class Portal extends Effect {
@@ -133,7 +134,7 @@ Game.startState.on("enter", function(event) {
   var loader = new Loader("loader");
   horizon = loader.loadImage("images/horizon.png");
   Sprites.load(loader.loaded("sprites"));
-  level = loadLevel(Levels.demo, loader);
+  level = loadLevel(currentLevelData, loader);
   loader.waitUntilLoaded(() => Game.switchState(level));
   Game.switchState(loader);
 });
@@ -168,7 +169,7 @@ deathState.on("update", function(event) {
   deathStateTimeout -= event.delta;
   if (deathStateTimeout < 0) {
     var loader = new Loader("loader");
-    level = loadLevel(Levels.demo, loader);
+    level = loadLevel(currentLevelData, loader);
     loader.waitUntilLoaded(() => Game.switchState(level));
     Game.switchState(loader);
   }
@@ -190,9 +191,9 @@ successState.on("update", function(event) {
   level.trigger(event);
   successStateTimeout -= event.delta;
   if (successStateTimeout < 0) {
-    var nextLevel = levelSequence.shift();
+    currentLevelData = levelSequence.shift();
     var loader = new Loader("loader");
-    level = loadLevel(nextLevel, loader);
+    level = loadLevel(currentLevelData, loader);
     loader.waitUntilLoaded(() => Game.switchState(level));
     Game.switchState(loader);
   }

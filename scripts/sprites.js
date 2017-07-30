@@ -88,6 +88,8 @@ class ItemSpriteSheet extends SpriteSheet {
     // Set the colours from the config.
     context.fillStyle = Config.orbColor;
     context.fillRect(0, 0, 64, 64);
+    context.fillStyle = Config.portalColor;
+    context.fillRect(64, 0, 448, 64);
     this.setColorMap(colorMap);
     console.log("Item sprites loaded.");
     callback();
@@ -119,6 +121,7 @@ var Sprites = (function() {
     },
     items: {
       orb: 0,
+      portal: [1, 2, 3, 4, 5, 6, 7],
     },
   };
 

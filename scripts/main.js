@@ -4,6 +4,28 @@ var horizon;
 var wizard;
 var monster;
 var level;
+var portal;
+
+class Portal extends Effect {
+  constructor(position) {
+    super(position, 10);
+    this.animationTime = 0;
+    this.on("update", event => this.animationTime += event.delta);
+  }
+  activate(object) {
+    if (object instanceof Wizard) {
+      console.log("Portal reached.");
+      Game.switchState(new EventManager("done"));
+    }
+  }
+  draw(context) {
+    var portal = Sprites.codes.items.portal;
+    var phase = Math.floor(Config.animationFrameRate * this.animationTime);
+    var sprite = portal[phase % portal.length];
+    var x = this.position.x, y = this.position.y, r = 50;
+    Sprites.sheet.items.draw(context, sprite, x - r, y - r, 2 * r, 2 * r);
+  }
+}
 
 function loadLevel(level, loader) {
   var pointHandlers = {
@@ -23,6 +45,11 @@ function loadLevel(level, loader) {
     },
     "orb": function(level, position, callback) {
       level.add(new Health(position, 50));
+      schedule(callback);
+    },
+    "portal": function(level, position, callback) {
+      portal = new Portal(position);
+      level.add(portal);
       schedule(callback);
     },
   };

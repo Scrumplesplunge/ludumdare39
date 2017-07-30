@@ -6,8 +6,8 @@ class Item extends Effect {
     this.spriteRadius = spriteRadius || radius;
   }
   activate(object) {
-    console.log("Item collected.");
     if (object instanceof Wizard) {
+      console.log("Item collected.");
       object.give(this);
       this.remove();
     }

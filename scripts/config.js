@@ -42,5 +42,6 @@ var Config = {
   showBoundaries: false,
   updateDelay: 0.01,
   orbColor: "#00ff00",
+  portalColor: "#00ffff",
   rewardSpeed: 500,
 };

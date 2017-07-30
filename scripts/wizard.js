@@ -91,8 +91,7 @@ class Item extends Effect {
   }
   draw(context) {
     var x = this.position.x, y = this.position.y, r = this.spriteRadius;
-    Sprites.sheet.wizard.draw(
-        context, this.sprite, x - r, y - r, 2 * r, 2 * r);
+    Sprites.sheet.items.draw(context, this.sprite, x - r, y - r, 2 * r, 2 * r);
   }
 }
 

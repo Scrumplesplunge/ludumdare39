@@ -45,6 +45,7 @@ class WizardSpriteSheet extends SpriteSheet {
     this.setColors(Config.wizard.color.robe,
                    Config.wizard.color.shoes,
                    Config.wizard.color.skin);
+    console.log("Wizard sprites loaded.");
     callback();
   }
   setColors(robe, shoes, skin) {
@@ -65,6 +66,24 @@ class WizardSpriteSheet extends SpriteSheet {
     context.fillStyle = Config.orbColor;
     context.fillRect(0, 384, 64, 64);
     this.setColorMap(colorMap);
+  }
+}
+
+class ItemSpriteSheet extends SpriteSheet {
+  constructor(filename, callback) {
+    super(filename, () => this.spriteSheetReady(callback));
+  }
+  spriteSheetReady(callback) {
+    var colorMap = document.createElement("canvas");
+    colorMap.width = this.image.width;
+    colorMap.height = this.image.height;
+    var context = colorMap.getContext("2d");
+    // Set the colours from the config.
+    context.fillStyle = Config.orbColor;
+    context.fillRect(0, 0, 64, 64);
+    this.setColorMap(colorMap);
+    console.log("Item sprites loaded.");
+    callback();
   }
 }
 
@@ -91,7 +110,7 @@ var Sprites = (function() {
       },
     },
     items: {
-      orb: 48,
+      orb: 0,
     },
   };
 
@@ -99,8 +118,9 @@ var Sprites = (function() {
     console.log("Loading sprites...");
     var barrier = new AsyncBarrier;
     sheet.wizard = new WizardSpriteSheet("wizard.png", barrier.increment());
+    sheet.items = new ItemSpriteSheet("items.png", barrier.increment());
     barrier.wait(function() {
-      console.log("Sprites loaed.");
+      console.log("All sprites loaded.");
       callback();
     });
   }

@@ -30,11 +30,11 @@ function drawStatus(event) {
         if (wizard.selectedItem < wizard.items.length) {
           Sprites.sheet.items.draw(
               event.context, Sprites.codes.items.selection,
-              10 + 64 * wizard.selectedItem, Config.screen.height - 94, 64, 64);
+              10 + 64 * wizard.selectedItem, Config.screen.height - 99, 64, 64);
         }
         for (var i = 0, n = wizard.items.length; i < n; i++) {
           Sprites.sheet.items.draw(event.context, wizard.items[i].sprite,
-                                   10 + 64 * i, Config.screen.height - 94,
+                                   10 + 64 * i, Config.screen.height - 99,
                                    64, 64);
         }
       }

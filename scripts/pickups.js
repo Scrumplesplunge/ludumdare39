@@ -38,7 +38,7 @@ class Health extends Effect {
   }
 }
 
-class TransformCast extends Effect {
+class SpellCast extends Effect {
   constructor(position, direction) {
     super(position, 20);
     this.lifetime = 3;  // Limit the lifetime of the spell for performance.
@@ -50,6 +50,10 @@ class TransformCast extends Effect {
     this.lifetime -= delta;
     if (this.lifetime < 0) this.remove();
   }
+}
+
+class TransformCast extends SpellCast {
+  constructor(position, direction) { super(position, direction); }
   activate(object) {
     if (object instanceof Monster) {
       console.log("Hit monster.");
@@ -67,6 +71,7 @@ class TransformSpell extends Item {
   use(wizard, targetPosition) {
     var spellDirection = targetPosition.sub(wizard.position).normalized();
     wizard.universe.add(new TransformCast(wizard.position, spellDirection));
+    wizard.hurt(Config.spellCost);
   }
 }
 

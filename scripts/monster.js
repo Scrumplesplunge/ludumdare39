@@ -10,11 +10,15 @@ class Monster extends Humanoid {
       // Find a target.
       var wizards = this.universe.objects.filter(object => {
         if (!(object instanceof Wizard)) return false;
+        if (object.universe == null) return false;
         var offset = object.position.sub(this.position);
         return offset.length() < Config.creatures.monster.chaseRange;
       });
       if (wizards.length > 0) this.target = wizards.random();
     }
+
+    // Stop following the player if they have left the universe.
+    if (this.target != null && this.target.universe == null) this.target = null;
 
     if (this.target != null && this.target.life > 0) {
       var offset = this.target.position.sub(this.position);

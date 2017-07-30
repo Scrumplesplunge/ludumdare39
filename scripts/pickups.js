@@ -58,6 +58,7 @@ class TransformCast extends SpellCast {
     if (object instanceof Monster) {
       console.log("Hit monster.");
       this.universe.randomParticles(object.position, 30, 50, 100, 0.5);
+      this.universe.add(new Pig(object.position));
       object.remove();
       this.remove();
     }

@@ -2,6 +2,10 @@ var Config = {
   animationFrameRate: 15,
   cameraTrackingRate: 0.999,
   creatures: {
+    pig: {
+      jumpSpeed: 400,
+      speed: 100,
+    },
     monster: {
       attackDamage: 50,
       chaseRange: 500,

@@ -1,4 +1,4 @@
-class Wizard extends Creature {
+class Wizard extends Humanoid {
   constructor(position) {
     super(position, "wizard");
     this.items = [];  // Things collected by the wizard.

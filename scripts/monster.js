@@ -1,4 +1,4 @@
-class Monster extends Creature {
+class Monster extends Humanoid {
   constructor(position) {
     super(position, "monster");
     this.target = null;
@@ -23,7 +23,6 @@ class Monster extends Creature {
       }
     }
     // Move randomly.
-    var p = Math.pow(0.1, delta);
-    if (Math.random() > p) this.movement = Math.floor(3 * Math.random()) - 1;
+    this.moveRandomly(delta);
   }
 }

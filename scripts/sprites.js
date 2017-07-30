@@ -102,29 +102,46 @@ class ItemSpriteSheet extends SpriteSheet {
 
 var Sprites = (function() {
   var sheet = {
-    wizard: null,
-    monster: null,
+    animals: null,
     items: null,
+    monster: null,
     particles: null,
+    wizard: null,
+  };
+
+  var humanoid = {
+    direction: {
+      right: 0,
+      left: 32,
+    },
+    part: {
+      bones: 0,
+      robe: 8,
+      shoes: 16,
+      skin: 24,
+    },
+    state: {
+      stationary: 0,
+      running: [1, 2, 3, 4, 5],
+      jumping: 6,
+    },
   };
 
   var codes = {
-    creature: {
-      direction: {
-        right: 0,
-        left: 32,
+    creatures: {
+      pig: {
+        direction: {
+          right: 0,
+          left: 4,
+        },
+        state: {
+          stationary: 0,
+          running: [1, 2, 3],
+          jumping: 0,
+        },
       },
-      part: {
-        bones: 0,
-        robe: 8,
-        shoes: 16,
-        skin: 24,
-      },
-      state: {
-        stationary: 0,
-        running: [1, 2, 3, 4, 5],
-        jumping: 6,
-      },
+      monster: humanoid,
+      wizard: humanoid,
     },
     items: {
       health: 0,
@@ -138,11 +155,12 @@ var Sprites = (function() {
   function load(callback) {
     console.log("Loading sprites...");
     var barrier = new AsyncBarrier;
-    sheet.wizard = new CreatureSpriteSheet("wizard", barrier.increment());
-    sheet.monster = new CreatureSpriteSheet("monster", barrier.increment());
+    sheet.animals = new SpriteSheet("images/animals.png", barrier.increment());
     sheet.items = new ItemSpriteSheet("images/items.png", barrier.increment());
+    sheet.monster = new CreatureSpriteSheet("monster", barrier.increment());
     sheet.particles =
         new SpriteSheet("images/particles.png", barrier.increment());
+    sheet.wizard = new CreatureSpriteSheet("wizard", barrier.increment());
     barrier.wait(function() {
       console.log("All sprites loaded.");
       callback();

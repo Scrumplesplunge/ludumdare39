@@ -17,5 +17,5 @@ class Keyboard extends EventManager {
     delete this.keys[event.key];
     this.trigger(event);
   }
-  key(name) { return this.keys.hasOwnProperty(event.key); }
+  key(name) { return this.keys.hasOwnProperty(name); }
 }
